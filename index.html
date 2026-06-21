@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21天歐洲紀念之旅 | V6 旗艦版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        h1, h2, h3, .serif-font {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 頁籤狀態樣式 */
+        .tab-btn { position: relative; transition: all 0.3s ease; }
+        .tab-active { color: #b45309; font-weight: 700; }
+        .tab-active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #b45309; border-top-left-radius: 4px; border-top-right-radius: 4px;
+        }
+        .tab-inactive { color: #64748b; font-weight: 500; }
+        .tab-inactive:hover { color: #b45309; background-color: #f1f5f9; }
+
+        /* 動畫 */
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 時段表格排版 */
+        .schedule-grid { display: grid; grid-template-columns: 80px 1fr; gap: 1rem; }
+        @media (min-width: 768px) {
+            .schedule-grid { grid-template-columns: 100px 1fr; }
+        }
+
+        /* 勾選清單 */
+        .ck { cursor: pointer; }
+        .ck .tick-on { display: none; }
+        .ck.done .tick-on { display: inline-block; }
+        .ck.done .tick-off { display: none; }
+        .ck.done .ck-label { text-decoration: line-through; color: #94a3b8; }
+        .ck.done .ck-desc { color: #cbd5e1; }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- 頂部導航與標題 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="relative bg-slate-900 overflow-hidden">
+            <div class="absolute inset-0 opacity-30">
+                <img src="assets/hero.jpg" alt="Paris" class="w-full h-full object-cover">
+            </div>
+            <div class="relative max-w-6xl mx-auto px-6 py-10 md:py-14 text-center">
+                <p class="text-amber-500 uppercase tracking-[0.2em] text-xs md:text-sm font-bold mb-3">Grand Tour of Europe 2026</p>
+                <h1 class="text-4xl md:text-5xl font-bold text-white tracking-widest mb-4">21天歐洲紀念之旅</h1>
+                <p class="text-slate-300 md:text-lg">旗艦版 V6：維也納 ✦ 奧地利湖區 ✦ 蔚藍海岸 ✦ 花都巴黎</p>
+            </div>
+        </div>
+
+        <!-- 頁籤按鈕區 -->
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex overflow-x-auto hide-scrollbar border-b border-slate-200">
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-active" data-region="vienna">Stage 1: 維也納</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="lake">Stage 2: 奧地利湖區</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="riviera">Stage 3: 蔚藍海岸</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="paris">Stage 4: 花都巴黎</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="booking"><i class="fa-solid fa-cart-shopping mr-1.5 text-sm"></i>預訂採購</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="prep"><i class="fa-solid fa-suitcase-rolling mr-1.5 text-sm"></i>行前準備</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="max-w-6xl mx-auto px-4 mt-10">
+        <div id="content-container" class="space-y-10 fade-in">
+            <!-- 內容將由 JavaScript 動態產生 -->
+        </div>
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-4 mt-16 pt-8 border-t border-slate-200 text-center text-slate-400 text-sm">
+        資料整理自《2026歐洲紀念之旅_21天旗艦版行程表_V6》與「行前準備」分頁 · 互動儀表板 <span class="text-rose-400">♥</span>
+    </footer>
+
+    <script>
+        // 包含早中晚、所在地點、交通與 Klook 升級方案的 V6 完整資料
+        const itineraryData = {
+            vienna: [
+                {
+                    date: "08/26 (三)", dayTitle: "啟程．桃園飛向歐洲", mapQuery: "Taoyuan International Airport", img: "assets/dep26.jpg",
+                    klook: "✈️ 中華航空 CI0063：台北 桃園直飛維也納，正式展開 21 天紀念之旅",
+                    schedule: [
+                        { time: "早上", loc: "桃園機場", act: "前往桃園國際機場，辦理出境與行李託運準備出發", trans: "🚗 機場捷運或預約專車前往桃園機場", food: "機場航廈簡餐" },
+                        { time: "下午", loc: "機上", act: "搭乘中華航空班機啟程，告別台灣飛向帝國之都維也納", trans: "✈️ 中華航空 CI0063 (台北 桃園 -> 維也納)", food: "中華航空飛機餐" },
+                        { time: "晚上", loc: "機上", act: "於機上休息調整時差，養足精神迎接歐洲首站", trans: "✈️ 夜間飛行前往維也納", food: "中華航空飛機餐 / 宵夜" }
+                    ]
+                },
+                {
+                    date: "08/27 (四)", dayTitle: "抵達維也納與老城初探", mapQuery: "St. Stephen's Cathedral, Vienna", img: "assets/v27.jpg",
+                    klook: "🚕 Klook：維也納國際機場 (VIE) 專車接送至飯店",
+                    schedule: [
+                        { time: "早上", loc: "機場 / 飯店", act: "抵達維也納，飯店放行李辦理入住", trans: "🚕 Klook 專車接送直達", food: "機上早餐" },
+                        { time: "下午", loc: "老城區 (第1區)", act: "前往聖史蒂芬大教堂、格拉本大街、Kohlmarkt 精品街散步", trans: "🚇 地鐵 U1/U3線 (飯店站 -> Stephansplatz站)", food: "Café Central (建議訂位)" },
+                        { time: "晚上", loc: "老城區 (第1區)", act: "參觀世界最美圖書館——奧地利國家圖書館 (State Hall)", trans: "🚶 老城區內步行 (約 5-10 分鐘)", food: "Figlmüller (比臉大炸豬排)" }
+                    ]
+                },
+                {
+                    date: "08/28 (五)", dayTitle: "美泉宮與人文市場", mapQuery: "Schönbrunn Palace, Vienna", img: "assets/v28.jpg",
+                    klook: "🎟️ Klook：預訂美泉宮快速通關免排隊",
+                    schedule: [
+                        { time: "早上", loc: "美泉宮 (第13區)", act: "趁人潮較少時探訪夏宮「美泉宮」及其後花園、凱旋門", trans: "🚇 地鐵 U4線 (飯店站 -> Schönbrunn站)", food: "飯店早餐" },
+                        { time: "下午", loc: "納許市場", act: "前往納許市場 (Naschmarkt) 體驗在地輕食、起司與香料", trans: "🚇 地鐵 U4線 (Schönbrunn站 -> Kettenbrückengasse站)", food: "NENI am Naschmarkt" },
+                        { time: "晚上", loc: "卡爾廣場周邊", act: "步行至卡爾教堂與分離派展館外觀散策", trans: "🚶 步行 (市場至卡爾廣場約 5-10 分鐘)", food: "Meierei im Stadtpark (高級舒適法菜)" }
+                    ]
+                },
+                {
+                    date: "08/29 (六)", dayTitle: "藝術巡禮與古典音樂夜", mapQuery: "Belvedere Palace, Vienna", img: "assets/v29.jpg",
+                    klook: "🎵 Klook：預訂維也納古典音樂會門票 (取代一般晚餐)",
+                    schedule: [
+                        { time: "早上", loc: "美景宮 (第3區)", act: "至美景宮欣賞克林姆的經典巨作《吻》", trans: "🚋 路面電車 D線 (飯店站 -> Schloss Belvedere站)", food: "Café Schwarzenberg" },
+                        { time: "下午", loc: "博物館區", act: "於藝術史博物館 (欣賞古典建築) 或阿爾貝蒂娜美術館 (二選一)", trans: "🚋 路面電車 D線轉步行", food: "Gasthaus Pöschl (需訂位)" },
+                        { time: "晚上", loc: "國家歌劇院周邊", act: "特別安排：前往金色大廳或美泉宮欣賞經典古典音樂會", trans: "🚶 步行前往音樂會場地", food: "Do & Co Albertina (景觀餐廳)" }
+                    ]
+                },
+                {
+                    date: "08/30 (日)", dayTitle: "慢活步調與購物補給", mapQuery: "Kärntner Straße, Vienna", img: "assets/v30.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "城市公園/普拉特", act: "前往城市公園散步，或至 Prater 浪漫復古摩天輪走走", trans: "🚇 地鐵 U4線 (Stadtpark站) 或 U1線", food: "Café Landtmann" },
+                        { time: "下午", loc: "克恩滕大街商圈", act: "在 Kärntner Straße 等核心商圈進行奧地利伴手禮大補貨", trans: "🚇 地鐵 U1線 (-> Stephansplatz站)", food: "Zum Schwarzen Kameel" },
+                        { time: "晚上", loc: "飯店周邊", act: "早點回飯店整理行李，準備隔日出發前往阿爾卑斯湖區", trans: "🚶 步行 或 🚇 地鐵 返回飯店", food: "Ribs of Vienna (人氣烤肋排)" }
+                    ]
+                }
+            ],
+            lake: [
+                {
+                    date: "08/31 (一)", dayTitle: "高山公路與絕美仙境", mapQuery: "Hallstatt, Austria", img: "assets/l31.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "高山公路 (Postalm)", act: "自駕取車出發離開維也納，開車繞經 Postalm 高山公路享受絕美山景", trans: "🚗 自駕 (維也納取車 -> A1 高速公路 -> Postalm)", food: "飯店早餐" },
+                        { time: "下午", loc: "哈修塔特 (Hallstatt)", act: "抵達 Hallstatt 湖邊散步，捕捉明信片經典角度", trans: "🚗 自駕 (沿 B166 / B158 景觀公路前往湖區)", food: "高山公路沿途輕食" },
+                        { time: "晚上", loc: "哈修塔特湖畔", act: "入住湖區旅館，享受寧靜的湖畔夜晚與德奧傳統料理", trans: "🚶 小鎮內步行前往餐廳與旅館", food: "Seewirt Zauner 或 Gasthof Simony" }
+                    ]
+                },
+                {
+                    date: "09/01 (二)", dayTitle: "鹽礦探險與湖畔漫步", mapQuery: "Hallstatt Salt Mine", img: "assets/l01.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "哈修塔特 (Hallstatt)", act: "漫步明信片小鎮，探訪天主教堂與骨屋 (Beinhaus)", trans: "🚶 步行 或 🚢 湖區渡船 (前往 Hallstatt Markt)", food: "飯店早餐" },
+                        { time: "下午", loc: "哈修塔特鹽礦 / 湖區", act: "若鹽礦與 Skywalk 已開放則登頂參觀；若整修則租小船遊湖", trans: "🚠 鹽礦地面纜車 (Salzbergbahn) 或 🛶 租木船", food: "Café Derbl" },
+                        { time: "晚上", loc: "哈修塔特湖畔", act: "從湖心遠眺小鎮，或是改前往 Altaussee 鹽礦進行歷史體驗", trans: "🚗 自駕 或 🚶 步行", food: "湖區特色景觀餐廳" }
+                    ]
+                },
+                {
+                    date: "09/02 (三)", dayTitle: "達克斯坦山與聖沃夫岡", mapQuery: "5 Fingers, Dachstein", img: "assets/l02.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "Dachstein觀景台", act: "前往 Obertraun 搭乘纜車至 Dachstein 五指觀景台，俯瞰阿爾卑斯山", trans: "🚗 自駕 (飯店 -> 纜車站) + 🚠 Dachstein 纜車", food: "飯店早餐" },
+                        { time: "下午", loc: "高薩湖 / 巴德伊舍", act: "探訪 Gosausee 靜謐倒影 或 造訪皇家小鎮 Bad Ischl 皇家別墅", trans: "🚗 自駕 (B166 公路 或 B158 公路前往)", food: "Konditorei Zauner (歷史甜點名店)" },
+                        { time: "晚上", loc: "聖沃夫岡 (St. Wolfgang)", act: "漫步至聖沃夫岡湖畔，享受精緻的景觀晚餐", trans: "🚗 自駕 (前往 St. Wolfgang) + 🚶 湖畔步行", food: "Zum Weissen Hirschen" }
+                    ]
+                },
+                {
+                    date: "09/03 (四)", dayTitle: "阿爾卑斯飛往地中海", mapQuery: "Nice, France", img: "assets/l03.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "湖區至維也納公路", act: "上午享受湖區最後寧靜的早晨，隨後自駕出發返回維也納國際機場", trans: "🚗 自駕 (經 A1 高速公路，約 3.5 小時)", food: "飯店早餐" },
+                        { time: "下午", loc: "維也納機場 (VIE)", act: "抵達機場辦理還車手續，並前往航廈辦理登機與行李託運", trans: "🚶 機場還車點步行至出境大廳", food: "機場航廈簡餐" },
+                        { time: "晚上", loc: "尼斯市區 (Nice)", act: "搭機直飛南法尼斯，抵達後搭乘輕軌 2 號線前往飯店入住", trans: "✈️ OS379 (18:55-20:40) + 🚋 尼斯輕軌 L2線", food: "飯店附近南法小酒館" }
+                    ]
+                }
+            ],
+            riviera: [
+                {
+                    date: "09/04 (五)", dayTitle: "尼斯舊城與蔚藍海岸", mapQuery: "Promenade des Anglais, Nice", img: "assets/r04.png",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "尼斯薩萊雅廣場", act: "探訪熱鬧的 Cours Saleya 傳統市集與鮮花市場，感受在地活力", trans: "🚋 輕軌 L1線 (-> Opéra - Vieille Ville站)", food: "飯店早餐" },
+                        { time: "下午", loc: "尼斯舊城 / 城堡山", act: "漫步於尼斯舊城 (Vieux Nice)，隨後登上城堡山俯瞰壯麗的天使灣", trans: "🚶 舊城區步行 + 🛗 城堡山免費電梯", food: "Chez Pipo (道地南法鷹嘴豆餅)" },
+                        { time: "晚上", loc: "英國人散步大道", act: "於著名的英國人散步大道 (Promenade des Anglais) 吹海風漫步", trans: "🚶 沿海岸線步行", food: "Le Plongeon (絕美懸崖海景餐廳)" }
+                    ]
+                },
+                {
+                    date: "09/05 (六)", dayTitle: "專車輕鬆遊：摩納哥與埃茲", mapQuery: "Eze Village, France", img: "assets/r05.jpeg",
+                    klook: "🚐 Klook：摩納哥與埃茲半日遊專屬小巴 (取代火車/公車擠車)",
+                    schedule: [
+                        { time: "早上", loc: "摩納哥 (Monaco)", act: "搭乘專車前往奢華公國摩納哥，漫步 F1 經典賽道、皇宮區與賭場", trans: "🚐 Klook 小巴由尼斯飯店出發直達", food: "飯店早餐" },
+                        { time: "下午", loc: "埃茲山城 (Èze)", act: "專車載往懸崖上的鷹巢村 Èze 埃茲山城，登頂熱帶花園俯瞰全景", trans: "🚐 Klook 小巴接送", food: "摩納哥港口旁輕食餐酒館" },
+                        { time: "晚上", loc: "尼斯舊城區", act: "返回尼斯市區，享受輕鬆的南法海鮮或地中海創意料理", trans: "🚐 小巴送回尼斯市區", food: "尼斯老城區特色餐廳" }
+                    ]
+                },
+                {
+                    date: "09/06 (日)", dayTitle: "安提布老城與星光坎城", mapQuery: "Cannes, France", img: "assets/r06.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "安提布 (Antibes)", act: "前往歷史悠久的安提布老城，探訪畢卡索美術館與古老海港", trans: "🚆 TER 區間車 (Nice-Ville站 -> Antibes站)", food: "飯店早餐" },
+                        { time: "下午", loc: "坎城 (Cannes)", act: "前往影展聖地坎城，在 La Croisette 海濱大道散步、朝聖影展宮", trans: "🚆 TER 區間車 (Antibes站 -> Cannes站)", food: "安提布老城傳統小餐館" },
+                        { time: "晚上", loc: "尼斯市區", act: "結束坎城行程後返回尼斯，安排老城區大啖新鮮海鮮冷盤與白酒", trans: "🚆 TER 區間車 (Cannes站 -> Nice-Ville站)", food: "尼斯市區知名海鮮餐廳" }
+                    ]
+                },
+                {
+                    date: "09/07 (一)", dayTitle: "專車深度遊：香水之都", mapQuery: "Grasse, France", img: "assets/r07.jpg",
+                    klook: "🚐 Klook：格拉斯與聖保羅全日遊專屬小巴 (取代昂貴私人包車)",
+                    schedule: [
+                        { time: "早上", loc: "聖保羅山城", act: "搭乘專車前往充滿文藝與現代藝術氣息的 Saint-Paul-de-Vence 散步", trans: "🚐 Klook 小巴由飯店接送", food: "飯店早餐" },
+                        { time: "下午", loc: "格拉斯 (Grasse)", act: "前往香水之都格拉斯，參與經典香水工坊親手調配專屬紀念香水", trans: "🚐 Klook 小巴接送", food: "Saint-Paul-de-Vence 景觀餐廳" },
+                        { time: "晚上", loc: "尼斯海濱", act: "返回尼斯市區，在海濱小酌享受蔚藍海岸的最後一個夜晚", trans: "🚐 小巴送回尼斯市區", food: "尼斯市區精緻法菜" }
+                    ]
+                },
+                {
+                    date: "09/08 (二)", dayTitle: "告別地中海，TGV 直達花都", mapQuery: "Gare de Lyon, Paris", img: "assets/r08.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "尼斯火車站", act: "在尼斯享用最後的地中海早午餐，隨後前往火車站準備搭車", trans: "🚋 輕軌 或 🚕 計程車 (-> Nice-Ville)", food: "飯店早餐 / 午餐" },
+                        { time: "下午", loc: "TGV 高鐵上", act: "搭乘舒適的 TGV 高鐵直達巴黎里昂車站，車程約5.5-6.5小時", trans: "🚄 TGV 高鐵 (Nice-Ville -> Paris Gare de Lyon)", food: "高鐵餐車或外帶簡餐" },
+                        { time: "晚上", loc: "巴黎市區", act: "抵達花都巴黎，辦理飯店入住後，於靜謐的塞納河畔漫步", trans: "🚇 地鐵 1/14號線 或 🚕 計程車前往巴黎飯店", food: "飯店附近經典 Bistrot" }
+                    ]
+                }
+            ],
+            paris: [
+                {
+                    date: "09/09 (三)", dayTitle: "左岸浪漫與塞納河遊船", mapQuery: "Café de Flore, Paris", img: "assets/p09.jpg",
+                    klook: "🚢 Klook：預訂塞納河遊船票 (免排隊換票)",
+                    schedule: [
+                        { time: "早上", loc: "西堤島 / 聖母院", act: "參觀絕美彩色玻璃窗聖禮拜堂，並走訪西堤島歷史遺跡", trans: "🚇 地鐵 4號線 (-> Cité站) + 🚶 步行", food: "Café de Flore 或 Les Deux Magots" },
+                        { time: "下午", loc: "拉丁區 / 左岸", act: "漫步充滿文藝氛圍的拉丁區、左岸，拜訪莎士比亞書店打卡", trans: "🚶 步行 (跨越塞納河橋樑)", food: "左岸老街法式輕食" },
+                        { time: "晚上", loc: "塞納河遊船", act: "黃昏至夜晚安排塞納河遊船，從水上欣賞巴黎兩岸古蹟與鐵塔閃爍夜景", trans: "🚶 步行前往碼頭 + 🚢 塞納河遊船", food: "La Jacobine (人氣法式料理)" }
+                    ]
+                },
+                {
+                    date: "09/10 (四)", dayTitle: "羅浮宮藝術聖殿", mapQuery: "Louvre Museum", img: "assets/p10.jpg",
+                    klook: "🎟️ Klook：使用巴黎博物館通行證 (需提早官網預約時段)",
+                    schedule: [
+                        { time: "早上", loc: "羅浮宮 (第1區)", act: "全日深度參觀世界級藝術聖殿羅浮宮，持通行證走專屬通道親臨三寶", trans: "🚇 地鐵 1/7號線 (-> Palais-Royal - Musée du Louvre)", food: "Angelina (熱巧克力與蒙布朗)" },
+                        { time: "下午", loc: "杜樂麗花園", act: "走出羅浮宮至杜樂麗花園享受午後陽光，前往皇家宮殿拍攝黑白柱", trans: "🚶 步行 (緊鄰羅浮宮周邊)", food: "羅浮宮周邊法式簡餐" },
+                        { time: "晚上", loc: "巴黎市區", act: "傍晚漫步巴黎街頭，晚餐後欣賞花都迷人的城市夜景", trans: "🚇 地鐵 或 🚶 步行返回", food: "巴黎市區特色法式小館" }
+                    ]
+                },
+                {
+                    date: "09/11 (五)", dayTitle: "凡爾賽宮奢華一日遊", mapQuery: "Palace of Versailles", img: "assets/p11.jpg",
+                    klook: "🎟️ Klook：使用巴黎博物館通行證 (需提早官網預約時段)",
+                    schedule: [
+                        { time: "早上", loc: "凡爾賽宮", act: "持通行證搭火車前往巴黎近郊，參觀全歐洲最奢華的宮殿與鏡廳", trans: "🚆 RER C線 (-> Versailles Château Rive Gauche站)", food: "Carette 經典烘焙與咖啡" },
+                        { time: "下午", loc: "凡爾賽花園", act: "漫步廣闊的皇家花園、大/小特里亞農宮與極具田園風情的瑪麗皇后村莊", trans: "🚶 步行 或 🚙 園區內付費遊園車", food: "宮殿花園內輕食咖啡廳" },
+                        { time: "晚上", loc: "巴黎市區", act: "搭車返回巴黎市區，晚上特別安排一頓正式且浪漫的精緻法式正餐", trans: "🚆 RER C線返回巴黎市區 + 🚇 地鐵", food: "米其林推薦或正式法餐" }
+                    ]
+                },
+                {
+                    date: "09/12 (六)", dayTitle: "鐵塔地標與香榭麗舍", mapQuery: "Arc de Triomphe", img: "assets/p12.jpg",
+                    klook: "🎟️ Klook：使用巴黎博物館通行證 (免費登頂凱旋門)",
+                    schedule: [
+                        { time: "早上", loc: "夏佑宮 / 戰神廣場", act: "前往夏佑宮拍攝艾菲爾鐵塔最佳零死角視角，隨後在戰神廣場散步", trans: "🚇 地鐵 6/9號線 (-> Trocadéro站) + 🚶 步行", food: "Carette Trocadéro 露天早餐" },
+                        { time: "下午", loc: "凱旋門 (第8區)", act: "持通行證免排隊登上凱旋門，俯瞰十二道放射狀大道並漫步香榭大道", trans: "🚇 地鐵 6號線 (-> Charles de Gaulle - Étoile站)", food: "香榭麗舍大道周邊景觀餐廳" },
+                        { time: "晚上", loc: "香榭麗舍商圈", act: "在香榭麗舍大道周邊享用豐盛晚餐，體驗巴黎最熱鬧的繁華之夜", trans: "🚶 沿大道步行", food: "Le Relais de l’Entrecôte (排隊牛排)" }
+                    ]
+                },
+                {
+                    date: "09/13 (日)", dayTitle: "蒙馬特與歌劇院商圈", mapQuery: "Sacré-Cœur, Paris", img: "assets/p13.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "蒙馬特高地", act: "搭地鐵前往波希米亞風情的蒙馬特，走訪聖心堂並在小丘廣場看畫家作畫", trans: "🚇 地鐵 2號線 (Anvers站) + 🚠 蒙馬特纜車", food: "飯店早餐" },
+                        { time: "下午", loc: "巴黎歌劇院商圈", act: "前往巴黎歌劇院商圈，在拉法葉百貨與春天百貨進行集中採買", trans: "🚇 地鐵 12號線轉 7號線 (-> Opéra站)", food: "Bouillon Pigalle (平價法式食堂)" },
+                        { time: "晚上", loc: "歌劇院周邊", act: "在歌劇院周邊熱門餐廳享用晚餐，為隔天的迪士尼一日遊充電", trans: "🚶 步行", food: "Pink Mamma (超人氣義式，需預訂)" }
+                    ]
+                },
+                {
+                    date: "09/14 (一)", dayTitle: "巴黎迪士尼樂園", mapQuery: "Disneyland Paris", img: "assets/p14.jpg",
+                    klook: "🏰 Klook：提前預訂巴黎迪士尼樂園門票 (掃 QR Code 直接入園)",
+                    schedule: [
+                        { time: "早上", loc: "迪士尼樂園", act: "週一前往完美避開週末人潮，開園即入場暢遊熱門設施", trans: "🚆 RER A線 (巴黎市區 -> Marne-la-Vallée站)", food: "飯店早餐 / 樂園輕食" },
+                        { time: "下午", loc: "迪士尼影城/樂園", act: "繼續暢遊雙園區，觀賞精彩的主題大遊行與歐洲限定表演", trans: "🚶 雙樂園內步行", food: "樂園園區內主題餐廳" },
+                        { time: "晚上", loc: "迪士尼樂園", act: "留到最後一刻，觀賞震撼動人的粉紅睡美人城堡星光煙火秀", trans: "🚆 RER A線 (返回巴黎市區)", food: "迪士尼小鎮或風味餐" }
+                    ]
+                },
+                {
+                    date: "09/15 (二)", dayTitle: "奧賽美術館與瑪黑區", mapQuery: "Musée d'Orsay", img: "assets/p15.jpg",
+                    klook: "🎟️ Klook：使用巴黎博物館通行證 (免購票排隊)",
+                    schedule: [
+                        { time: "早上", loc: "奧賽美術館", act: "持通行證前往塞納河畔的奧賽美術館，在標格大時鐘旁欣賞印象派畫作", trans: "🚆 RER C線 或 🚇 地鐵 12號線 (Solférino站)", food: "飯店早餐" },
+                        { time: "下午", loc: "瑪黑區 (第3/4區)", act: "探訪極具文青個性的瑪麗區，逛獨立選物店並在孚日廣場歇息", trans: "🚇 地鐵 1號線 (St-Paul站) + 🚶 步行", food: "Breizh Café (巴黎最好吃可麗餅)" },
+                        { time: "晚上", loc: "巴黎市區", act: "特別造訪一間隱密的巴黎經典 Speakeasy 地下酒吧，小酌微醺", trans: "🚶 步行 或 🚕 預約 Uber", food: "特色餐酒館" }
+                    ]
+                },
+                {
+                    date: "09/16 (三)", dayTitle: "最後採買與退稅理清", mapQuery: "Gare de Lyon", img: "assets/p16.jpg",
+                    klook: "",
+                    schedule: [
+                        { time: "早上", loc: "左岸藥妝/精品區", act: "展開最後大採買，前往 Citypharma 藥妝店掃貨經典法國醫美保養品", trans: "🚇 地鐵 4號線 (-> St-Germain-des-Prés站)", food: "飯店早餐" },
+                        { time: "下午", loc: "超市/食品百貨", act: "造訪優質超市或食品百貨，將法式點心、鹽之花等伴手禮補齊", trans: "🚇 地鐵轉乘 或 🚕 計程車協助載運戰利品", food: "Bouillon Chartier (百年平價法式食堂)" },
+                        { time: "晚上", loc: "里昂車站", act: "回飯店完成行李打包與退稅單整理，並於華麗宮殿餐廳享用最後一餐", trans: "🚇 地鐵 1/14號線 (-> Gare de Lyon站)", food: "Le Train Bleu (藍色火車餐廳)" }
+                    ]
+                },
+                {
+                    date: "09/17 (四)", dayTitle: "珍重再見歐陸", mapQuery: "Charles de Gaulle Airport", img: "assets/p17.jpg",
+                    klook: "🚕 Klook：巴黎戴高樂機場 (CDG) 專車接送 (行李免搬運直達航廈)",
+                    schedule: [
+                        { time: "早上", loc: "戴高樂機場 (CDG)", act: "辦理退房，搭乘預約好的專屬機場接送前往機場，辦理退稅與登機", trans: "🚕 Klook 預約專車接送 (巴黎飯店 -> 戴高樂)", food: "機場航廈簡餐" },
+                        { time: "下午", loc: "飛機上", act: "搭乘長榮航空 BR088 優質客機直飛返台 (預計 11:20 起飛)", trans: "✈️ 長榮航空 BR088 直飛航班", food: "長榮航空飛機餐" },
+                        { time: "晚上", loc: "桃園機場", act: "班機於夜間或隔日安全抵達台灣，滿載著 21 天的美好紀念順利返家", trans: "✈️ 抵達桃園國際機場，專車接送返家", food: "長榮航空飛機餐" }
+                    ]
+                }
+            ]
+        };
+
+        // ===== 預訂與採購（來源：行程備註）=====
+        const KLOOK = [
+            { t: "維也納國際機場 (VIE) 專車接送", d: "Day 2 · 08/27" },
+            { t: "美泉宮快速通關", d: "Day 3 · 08/28" },
+            { t: "維也納古典音樂會門票", d: "Day 4 · 08/29" },
+            { t: "摩納哥與埃茲半日遊（南法經典山城）", d: "Day 9 · 09/05" },
+            { t: "格拉斯香水工坊體驗 + 聖保羅全日遊", d: "Day 11 · 09/07" },
+            { t: "塞納河遊船票", d: "Day 13 · 09/09" },
+            { t: "巴黎博物館通行證 Paris Museum Pass（4/6 日版）", d: "羅浮宮 / 凡爾賽 / 凱旋門 / 奧賽" },
+            { t: "巴黎迪士尼樂園門票（雙樂園一日券）", d: "Day 18 · 09/14" },
+            { t: "巴黎戴高樂機場 (CDG) 專車接送", d: "Day 21 · 09/17" }
+        ];
+        const SOUVENIRS = [
+            { reg: "維也納", color: "#b45309", items: ["Manner 威化餅", "Demel 小甜點", "莫札特巧克力", "Staud's 果醬", "南瓜籽油", "維也納咖啡豆", "Klimt 周邊", "Altmann & Kühne 巧克力", "Sacher Torte 旅行包裝"] },
+            { reg: "奧地利湖區", color: "#0f766e", items: ["Hallstatt 天然鹽", "木製手工藝品", "風景明信片", "天然鹽美妝", "湖區磁鐵", "Bad Ischl 皇家糕點", "奧地利草本茶", "小瓶蜂蜜"] },
+            { reg: "蔚藍海岸", color: "#0369a1", items: ["普羅旺斯手工香皂", "頂級橄欖油", "蔚藍海岸明信片", "Fragonard 香水", "摩納哥紀念品", "普羅旺斯綜合香草", "安提布手工藝品", "客製化香水", "香氛蠟燭"] },
+            { reg: "花都巴黎", color: "#9f1239", items: ["莎士比亞書店帆布袋", "Pierre Hermé 馬卡龍", "羅浮宮紀念品", "凡爾賽香氛", "La Grande Épicerie 食品", "鵝肝醬", "鹽之花", "Mariage Frères 茶葉", "Jacques Genin 焦糖", "法國醫美藥妝", "松露鹽", "法式芥末醬"] }
+        ];
+
+        // ===== 行前準備（來源：試算表「行前準備」分頁）=====
+        const FLIGHTS = [
+            { date: "08/26 (三)", route: "台北 桃園 → 維也納", note: "去程", code: "中華 CI0063" },
+            { date: "09/03 (四)", route: "維也納 VIE → 尼斯", note: "18:55 – 20:40", code: "奧航 OS379" },
+            { date: "09/08 (二)", route: "尼斯 → 巴黎 Gare de Lyon", note: "TGV 高鐵，約 5.5–6.5 小時", code: "TGV" },
+            { date: "09/17 (四)", route: "巴黎 CDG → 台北 桃園", note: "11:20 起飛 · 直飛返台", code: "長榮 BR088" }
+        ];
+        const PREP = [
+            { cat: "證件與簽證", icon: "fa-passport", color: "#b45309", items: [
+                { t: "中華民國護照", d: "效期需在預計離開申根區之日後，至少還有 6 個月以上。" },
+                { t: "ETIAS 電子旅行授權", d: "預計 2025/2026 年全面實施，台灣護照免簽但出發前需上網申請 ETIAS 授權。" },
+                { t: "國際駕照與台灣駕照", d: "(Day 6 奧地利湖區自駕必備) 需至監理所辦理國際駕照，並務必攜帶台灣駕照正本。" },
+                { t: "英文版申根旅遊平安險", d: "建議投保高額醫療與突發狀況險，並向保險公司索取英文版投保證明。" },
+                { t: "紙本文件備份", d: "護照影本、大頭照兩張、行程表 V6 列印版、飯店訂房確認信 (避免海關抽查)。" }
+            ]},
+            { cat: "財務與網路", icon: "fa-wallet", color: "#0f766e", items: [
+                { t: "歐元現金 (EUR)", d: "奧地利與法國皆使用歐元。建議換少許現金 (約 300–500 歐元) 用於小吃攤、市集或床頭小費。" },
+                { t: "海外高回饋信用卡", d: "攜帶 2–3 張 (Visa/Mastercard)。(Day 4 奧地利、Day 22 巴黎精品採買必備) 需確認額度。" },
+                { t: "信用卡預借現金密碼", d: "歐洲許多自動售票機 (如地鐵、火車) 刷卡時會要求輸入 4 位數 PIN 碼，出發前務必向銀行申請。" },
+                { t: "歐洲上網 eSIM / SIM 卡", d: "建議購買跨國大流量方案，自駕導航、隨時查 Google Maps 交通必備。" }
+            ]},
+            { cat: "Klook 專屬行程", icon: "fa-ticket", color: "#9f1239", items: [
+                { t: "維也納機場接送", d: "(Day 2) 預訂 VIE 機場至市區飯店專車。" },
+                { t: "美泉宮快速通關", d: "(Day 3) 預訂免排隊門票。" },
+                { t: "維也納古典音樂會", d: "(Day 4) 預訂金色大廳或美泉宮音樂會門票。" },
+                { t: "摩納哥＆埃茲半日遊", d: "(Day 11) 預訂尼斯出發的 Klook 專屬小巴，免去搭公車煩惱。" },
+                { t: "格拉斯＆聖保羅全日遊", d: "(Day 13) 預訂南法經典山城小巴全日遊，含香水工坊體驗。" },
+                { t: "塞納河遊船票", d: "(Day 15) 建議購買黃昏/夜間時段。" },
+                { t: "巴黎博物館通行證", d: "(Day 16–18, 21) 購買 4 日 或 6 日版 (Paris Museum Pass)，取代個別購票。" },
+                { t: "巴黎迪士尼雙樂園門票", d: "(Day 20) 提前購買一日雙園券。" },
+                { t: "戴高樂機場接送", d: "(Day 23) 預訂巴黎市區飯店至 CDG 機場專車 (留意退稅需提早到)。" }
+            ]},
+            { cat: "跨國/城交通票", icon: "fa-train", color: "#0369a1", items: [
+                { t: "機票預訂", d: "中華航空 (台北–維也納)、奧地利航空 (維也納–尼斯)、長榮航空 (巴黎–台北)。" },
+                { t: "奧地利租車預訂", d: "(Day 6–9) 預訂湖區性能車/電動車，留意需加保「全險 (Super Cover)」。" },
+                { t: "TGV 法國高鐵車票", d: "(Day 14) 尼斯 Nice-Ville 站 至 巴黎 Gare de Lyon 站 (建議提早 2–3 個月搶早鳥頭等艙)。" }
+            ]},
+            { cat: "衣物與穿搭", icon: "fa-shirt", color: "#7c3aed", items: [
+                { t: "洋蔥式穿搭衣物", d: "8 月底至 9 月中，歐洲日夜溫差大。需準備短袖、薄長袖，以及防風防寒外套。" },
+                { t: "正式服裝 (Smart Casual)", d: "(Day 4 音樂會、Day 17 巴黎米其林法餐) 需準備一套洋裝或襯衫皮鞋，避免被拒絕入場。" },
+                { t: "好穿的健走鞋/休閒鞋", d: "巴黎與維也納老城區多為「石板路」，強烈建議帶底厚且耐走的鞋子。" },
+                { t: "防曬與防雨用品", d: "太陽眼鏡、帽子、高係數防曬乳 (南法必備)；輕便雨傘或折疊雨衣 (巴黎秋季易有陣雨)。" },
+                { t: "個人常備藥物", d: "腸胃藥、感冒藥、暈車藥 (南法山城與奧地利高山公路可能用到)、OK 繃、個人慢性處方藥。" }
+            ]},
+            { cat: "必備手機 APP", icon: "fa-mobile-screen", color: "#475569", items: [
+                { t: "交通導航類", d: "Google Maps (必備)、ÖBB (奧地利國鐵)、SNCF Connect (法國高鐵/地鐵)、Uber / Bolt (叫車)。" },
+                { t: "翻譯與美食類", d: "Google Translate (下載法文與德文離線包)、TheFork (歐洲餐廳訂位神器)。" }
+            ]},
+            { cat: "其他生活小物", icon: "fa-plug", color: "#ca8a04", items: [
+                { t: "歐洲轉接頭與行動電源", d: "歐洲為雙圓孔插座 (220V)，需帶 2–3 個轉接頭與大容量行動電源 (拍照導航極耗電)。" },
+                { t: "防竊防搶隱形腰包", d: "巴黎與南法車站人潮眾多，建議護照與大鈔貼身攜帶，後背包可加小密碼鎖。" },
+                { t: "環保購物袋", d: "歐洲超市與藥妝店 (如 Day 22 Citypharma) 不免費提供塑膠袋，採買伴手禮必備。" }
+            ]}
+        ];
+
+        // ===== Google Sheet 雙向同步設定 =====
+        // 貼上 Apps Script「部署為網路應用程式」後得到的 /exec 網址即可啟用同步；
+        // 留空則行前準備改用內建資料 + 本機暫存(localStorage)。
+        const SHEET_SYNC_URL = "https://script.google.com/macros/s/AKfycbznfpcak0jrRiPz2HQKyKRAIgJ191WDO9HfkTs6RL1cfc9YSbuI_WlHMqFgN5pS7zVs/exec";
+        // 密鑰：須與 google-apps-script.gs 裡的 SECRET 完全一致(自行設一組長字串)。
+        const SHEET_SYNC_KEY = "0U6TyYh506u2zEbAhk8JtF_gB0B3pvLZKW_EYlam9z4";
+
+        const CAT_META = {
+            "📜 證件與簽證": { icon: "fa-passport", color: "#b45309" },
+            "💰 財務與網路": { icon: "fa-wallet", color: "#0f766e" },
+            "🎫 Klook 專屬行程": { icon: "fa-ticket", color: "#9f1239" },
+            "🚆 跨國/城交通票": { icon: "fa-train", color: "#0369a1" },
+            "👗 衣物與穿搭": { icon: "fa-shirt", color: "#7c3aed" },
+            "📱 必備手機 APP": { icon: "fa-mobile-screen", color: "#475569" },
+            "🛍️ 其他生活小物": { icon: "fa-plug", color: "#ca8a04" }
+        };
+        function catMeta(cat) { return CAT_META[(cat || '').trim()] || { icon: "fa-circle-check", color: "#64748b" }; }
+
+        // 本機暫存（離線或未設定同步時使用）
+        const PREP_LS = 'prepStatus_v1';
+        function prepStore() { try { return JSON.parse(localStorage.getItem(PREP_LS) || '{}'); } catch (e) { return {}; } }
+        function prepStoreSet(key, done) { const s = prepStore(); if (done) s[key] = 1; else delete s[key]; localStorage.setItem(PREP_LS, JSON.stringify(s)); }
+
+        function groupPrep(items) {
+            const groups = [], idx = {};
+            items.forEach(it => {
+                if (!idx[it.cat]) { const m = catMeta(it.cat); idx[it.cat] = { cat: it.cat, icon: m.icon, color: m.color, items: [] }; groups.push(idx[it.cat]); }
+                idx[it.cat].items.push(it);
+            });
+            return groups;
+        }
+        function prepFallbackItems() {
+            const store = prepStore(), out = [];
+            PREP.forEach(g => g.items.forEach(it => out.push({ row: null, cat: g.cat, item: it.t, desc: it.d, done: !!store[it.t] })));
+            return out;
+        }
+        async function loadPrepItems() {
+            if (SHEET_SYNC_URL) {
+                try {
+                    const res = await fetch(SHEET_SYNC_URL + '?key=' + encodeURIComponent(SHEET_SYNC_KEY), { method: 'GET' });
+                    const data = await res.json();
+                    if (data && data.ok && Array.isArray(data.items)) {
+                        return data.items.map(it => ({ row: it.row, cat: it.cat, item: it.item, desc: it.desc, done: !!it.done }));
+                    }
+                } catch (err) { console.warn('讀取 Google Sheet 失敗，改用內建資料：', err); }
+            }
+            return prepFallbackItems();
+        }
+
+        const container = document.getElementById('content-container');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+
+        function generateCardHTML(dayInfo) {
+            const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(dayInfo.mapQuery)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+            const fallbackImg = `https://placehold.co/800x400/f8fafc/94a3b8?text=${encodeURIComponent(dayInfo.dayTitle)}`;
+
+            let klookBanner = '';
+            if (dayInfo.klook) {
+                klookBanner = `
+                    <div class="mb-5 bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-start shadow-sm">
+                        <div class="text-amber-500 mr-3 mt-0.5"><i class="fa-solid fa-gem text-lg"></i></div>
+                        <div class="text-amber-900 font-semibold text-sm md:text-base">${dayInfo.klook}</div>
+                    </div>`;
+            }
+
+            let scheduleHTML = '';
+            dayInfo.schedule.forEach(row => {
+                let timeColor = row.time === '早上' ? 'text-sky-600 bg-sky-50 border-sky-200' :
+                                row.time === '下午' ? 'text-orange-600 bg-orange-50 border-orange-200' :
+                                'text-indigo-600 bg-indigo-50 border-indigo-200';
+                let iconTime = row.time === '早上' ? 'fa-sun' : row.time === '下午' ? 'fa-cloud-sun' : 'fa-moon';
+
+                scheduleHTML += `
+                    <div class="schedule-grid items-start border-b border-slate-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0">
+                        <div class="pt-1">
+                            <span class="inline-flex flex-col items-center justify-center w-full px-2 py-1.5 border rounded-md font-bold text-xs md:text-sm ${timeColor}">
+                                <i class="fa-solid ${iconTime} mb-1"></i> ${row.time}
+                            </span>
+                        </div>
+                        <div class="flex-1 text-sm md:text-base">
+                            <div class="font-bold text-slate-800 mb-1 flex items-center">
+                                <i class="fa-solid fa-location-dot text-slate-400 w-4 mr-1 text-xs"></i> ${row.loc}
+                            </div>
+                            <p class="text-slate-600 mb-2 leading-relaxed font-medium">${row.act}</p>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 mt-2">
+                                <div class="bg-slate-50 rounded px-3 py-2 text-xs md:text-sm text-slate-600 border border-slate-100 flex items-start">
+                                    <i class="fa-solid fa-route text-slate-400 mt-0.5 mr-2 w-4 text-center"></i>
+                                    <span>${row.trans}</span>
+                                </div>
+                                <div class="bg-slate-50 rounded px-3 py-2 text-xs md:text-sm text-slate-600 border border-slate-100 flex items-start">
+                                    <i class="fa-solid fa-utensils text-slate-400 mt-0.5 mr-2 w-4 text-center"></i>
+                                    <span>${row.food}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+
+            return `
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-slate-200 hover:shadow-lg transition-shadow">
+                    <div class="xl:flex">
+                        <div class="xl:w-2/5 flex flex-col">
+                            <div class="relative h-48 md:h-64 xl:h-64 bg-slate-100">
+                                <img src="${dayInfo.img}" alt="${dayInfo.dayTitle}" loading="lazy"
+                                     onerror="this.onerror=null; this.src='${fallbackImg}';"
+                                     class="absolute inset-0 w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+                                <div class="absolute bottom-4 left-5 right-5 text-white">
+                                    <span class="inline-block bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm uppercase tracking-wider">Day ${dayInfo.date}</span>
+                                    <h2 class="text-2xl md:text-3xl font-bold serif-font text-white drop-shadow-md leading-tight">${dayInfo.dayTitle}</h2>
+                                </div>
+                            </div>
+                            <div class="h-48 xl:flex-1 bg-slate-100 hidden md:block">
+                                <iframe width="100%" height="100%" frameborder="0" style="border:0;" loading="lazy" src="${mapUrl}" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="p-6 md:p-8 xl:w-3/5 flex flex-col">
+                            ${klookBanner}
+                            <div class="flex-1 bg-white">${scheduleHTML}</div>
+                        </div>
+                        <div class="h-48 bg-slate-100 md:hidden border-t border-slate-100">
+                            <iframe width="100%" height="100%" frameborder="0" style="border:0;" loading="lazy" src="${mapUrl}" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function sectionHeader(icon, title, sub) {
+            return `
+                <div class="text-center mb-8">
+                    <i class="fa-solid ${icon} text-amber-500 text-2xl mb-2"></i>
+                    <h2 class="text-3xl md:text-4xl font-bold serif-font text-slate-800">${title}</h2>
+                    <p class="text-slate-500 mt-1 text-sm md:text-base">${sub}</p>
+                </div>`;
+        }
+
+        function generateBookingHTML() {
+            const klookItems = KLOOK.map(k => `
+                <li class="ck flex items-start gap-3 px-3 py-3 rounded-lg hover:bg-slate-50 transition-colors">
+                    <span class="mt-0.5 text-lg leading-none">
+                        <i class="fa-regular fa-square tick-off text-slate-300"></i>
+                        <i class="fa-solid fa-square-check tick-on text-amber-500"></i>
+                    </span>
+                    <span class="text-sm md:text-base">
+                        <span class="ck-label font-medium text-slate-700">${k.t}</span>
+                        <span class="ck-desc block text-xs text-slate-400 mt-0.5 serif-font tracking-wide">${k.d}</span>
+                    </span>
+                </li>`).join('');
+
+            const souvCards = SOUVENIRS.map(s => `
+                <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50">
+                    <div class="flex items-center gap-2 mb-3 font-bold text-slate-800">
+                        <span class="w-2.5 h-2.5 rounded-full" style="background:${s.color}"></span>${s.reg}
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        ${s.items.map(i => `<span class="text-xs bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-full">${i}</span>`).join('')}
+                    </div>
+                </div>`).join('');
+
+            return `
+                ${sectionHeader('fa-cart-shopping', '預訂與採購', '整理自行程備註中的 Klook 待訂項目與伴手禮清單，可勾選備忘')}
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 pb-3 border-b border-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-gem text-amber-500"></i> Klook 待訂清單
+                        <span class="ml-auto text-xs font-normal text-slate-400 bg-slate-100 px-3 py-1 rounded-full">點擊勾選</span>
+                    </h3>
+                    <ul>${klookItems}</ul>
+                </div>
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-5 pb-3 border-b border-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-gift text-rose-400"></i> 伴手禮採購地圖
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${souvCards}</div>
+                </div>`;
+        }
+
+        function prepItemHTML(it, color) {
+            const key = String(it.item || '').replace(/"/g, '&quot;');
+            return `
+                <li class="ck ck-prep flex items-start gap-3 px-3 py-3 rounded-lg hover:bg-slate-50 transition-colors ${it.done ? 'done' : ''}" data-key="${key}" ${it.row ? `data-row="${it.row}"` : ''}>
+                    <span class="mt-0.5 text-lg leading-none">
+                        <i class="fa-regular fa-square tick-off text-slate-300"></i>
+                        <i class="fa-solid fa-square-check tick-on" style="color:${color}"></i>
+                    </span>
+                    <span class="text-sm md:text-base">
+                        <span class="ck-label font-semibold text-slate-700">${it.item}</span>
+                        <span class="ck-desc block text-xs md:text-sm text-slate-500 mt-1 leading-relaxed font-light">${it.desc}</span>
+                    </span>
+                </li>`;
+        }
+
+        function generatePrepHTML(groups) {
+            const flights = FLIGHTS.map(f => `
+                <div class="flex items-center gap-4 py-3 border-b border-slate-100 last:border-0">
+                    <div class="serif-font font-bold text-slate-800 w-24 flex-shrink-0">${f.date}</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-medium text-slate-700 text-sm md:text-base">${f.route}</div>
+                        <div class="text-xs text-slate-400 mt-0.5">${f.note}</div>
+                    </div>
+                    <div class="serif-font font-bold text-amber-600 text-sm md:text-base text-right flex-shrink-0">${f.code}</div>
+                </div>`).join('');
+
+            const cats = groups.map(g => `
+                    <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                        <div class="px-6 py-4 flex items-center gap-3 border-b border-slate-100" style="background:${g.color}0d">
+                            <span class="w-9 h-9 rounded-lg flex items-center justify-center text-white flex-shrink-0" style="background:${g.color}"><i class="fa-solid ${g.icon}"></i></span>
+                            <h3 class="font-bold text-slate-800 text-lg">${g.cat}</h3>
+                            <span class="ml-auto text-xs text-slate-400">行前準備分頁</span>
+                        </div>
+                        <ul class="p-3">${g.items.map(it => prepItemHTML(it, g.color)).join('')}</ul>
+                    </div>`).join('');
+
+            const syncNote = SHEET_SYNC_URL
+                ? '<span class="inline-flex items-center gap-1.5 text-emerald-600"><i class="fa-solid fa-cloud-arrow-up"></i> 已連動 Google Sheet，勾選即時雙向同步</span>'
+                : '<span class="inline-flex items-center gap-1.5 text-slate-400"><i class="fa-solid fa-circle-info"></i> 勾選暫存於本機（尚未設定 Google Sheet 同步）</span>';
+
+            return `
+                ${sectionHeader('fa-suitcase-rolling', '行前準備', '完整整理自試算表「行前準備」分頁，可逐項勾選核對')}
+                <div class="text-center -mt-5 mb-6 text-xs md:text-sm">${syncNote}</div>
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 pb-3 border-b border-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-plane-up text-sky-500"></i> 航班與跨城交通總覽
+                    </h3>
+                    ${flights}
+                </div>
+                ${cats}`;
+        }
+
+        function prepLoadingHTML() {
+            return `
+                ${sectionHeader('fa-suitcase-rolling', '行前準備', '完整整理自試算表「行前準備」分頁，可逐項勾選核對')}
+                <div class="text-center text-slate-400 py-16">
+                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-3"></i>
+                    <p class="text-sm">正在從 Google Sheet 讀取最新清單…</p>
+                </div>`;
+        }
+
+        async function renderRegion(regionKey) {
+            container.classList.remove('fade-in');
+            void container.offsetWidth;
+            container.classList.add('fade-in');
+
+            if (regionKey === 'booking') {
+                container.innerHTML = generateBookingHTML();
+            } else if (regionKey === 'prep') {
+                container.innerHTML = prepLoadingHTML();
+                const items = await loadPrepItems();
+                container.innerHTML = generatePrepHTML(groupPrep(items));
+            } else {
+                const data = itineraryData[regionKey];
+                container.innerHTML = data.map(dayInfo => generateCardHTML(dayInfo)).join('');
+            }
+        }
+
+        // 勾選清單（事件委派）：行前準備會寫回 Google Sheet + 本機暫存；其餘僅本次瀏覽
+        container.addEventListener('click', async function (e) {
+            const li = e.target.closest('.ck');
+            if (!li) return;
+            const willDone = !li.classList.contains('done');
+            li.classList.toggle('done', willDone);
+
+            if (li.classList.contains('ck-prep')) {
+                const key = li.getAttribute('data-key');
+                const row = li.getAttribute('data-row');
+                prepStoreSet(key, willDone);
+                if (SHEET_SYNC_URL && row) {
+                    try {
+                        const res = await fetch(SHEET_SYNC_URL, { method: 'POST', body: JSON.stringify({ key: SHEET_SYNC_KEY, row: Number(row), done: willDone }) });
+                        const d = await res.json();
+                        if (!d || !d.ok) throw new Error((d && d.error) || '同步失敗');
+                    } catch (err) {
+                        li.classList.toggle('done', !willDone);   // 還原 UI
+                        prepStoreSet(key, !willDone);
+                        alert('同步到 Google Sheet 失敗，已還原本次勾選。\n' + err);
+                    }
+                }
+            }
+        });
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                tabBtns.forEach(b => { b.classList.remove('tab-active'); b.classList.add('tab-inactive'); });
+                this.classList.remove('tab-inactive');
+                this.classList.add('tab-active');
+
+                renderRegion(this.getAttribute('data-region'));
+
+                const offset = document.querySelector('header').offsetHeight;
+                window.scrollTo({ top: document.querySelector('main').offsetTop - offset - 10, behavior: 'smooth' });
+            });
+        });
+
+        // 初始化顯示維也納
+        renderRegion('vienna');
+    </script>
+</body>
+</html>
