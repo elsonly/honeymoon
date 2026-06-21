@@ -6,6 +6,8 @@
     <title>21天歐洲紀念之旅 | V6 旗艦版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
 
@@ -50,6 +52,10 @@
         .ck.done .tick-off { display: none; }
         .ck.done .ck-label { text-decoration: line-through; color: #94a3b8; }
         .ck.done .ck-desc { color: #cbd5e1; }
+
+        /* 總覽地圖：選中的地點 */
+        .map-loc-on { background: #fff7ed !important; border-color: #fed7aa !important; }
+        .map-loc-on .fa-chevron-right { color: #b45309 !important; }
     </style>
 </head>
 <body class="pb-24">
@@ -70,7 +76,8 @@
         <!-- 頁籤按鈕區 -->
         <div class="max-w-6xl mx-auto px-4">
             <div class="flex overflow-x-auto hide-scrollbar border-b border-slate-200">
-                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-active" data-region="vienna">Stage 1: 維也納</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-active" data-region="home"><i class="fa-solid fa-map-location-dot mr-1.5 text-sm"></i>行程總覽</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="vienna">Stage 1: 維也納</button>
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="lake">Stage 2: 奧地利湖區</button>
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="riviera">Stage 3: 蔚藍海岸</button>
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="paris">Stage 4: 花都巴黎</button>
@@ -622,12 +629,147 @@
                 </div>`;
         }
 
+        function mapEmbed(q) {
+            return 'https://maps.google.com/maps?q=' + encodeURIComponent(q) + '&t=&z=13&ie=UTF8&iwloc=&output=embed';
+        }
+        function gmapsLink(q) {
+            return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+        }
+
+        // 各行程地點座標（OpenStreetMap 地理編碼）
+        const COORDS = {
+            "St. Stephen's Cathedral, Vienna": [48.208492, 16.373127],
+            "Schönbrunn Palace, Vienna": [48.184989, 16.311568],
+            "Belvedere Palace, Vienna": [48.191072, 16.379761],
+            "Kärntner Straße, Vienna": [48.206005, 16.371388],
+            "Hallstatt, Austria": [47.534794, 13.598888],
+            "Hallstatt Salt Mine": [47.5606, 13.644],
+            "5 Fingers, Dachstein": [47.5099, 13.6883],
+            "Nice, France": [43.700936, 7.268391],
+            "Promenade des Anglais, Nice": [43.685989, 7.237476],
+            "Eze Village, France": [43.729783, 7.361885],
+            "Cannes, France": [43.55152, 7.013442],
+            "Grasse, France": [43.658901, 6.92391],
+            "Gare de Lyon, Paris": [48.844382, 2.3748],
+            "Café de Flore, Paris": [48.854144, 2.332631],
+            "Louvre Museum": [48.861147, 2.338028],
+            "Palace of Versailles": [48.804425, 2.120285],
+            "Arc de Triomphe": [48.873779, 2.295037],
+            "Sacré-Cœur, Paris": [48.886806, 2.343015],
+            "Disneyland Paris": [48.870093, 2.77405],
+            "Musée d'Orsay": [48.859918, 2.326585],
+            "Gare de Lyon": [48.844683, 2.373774],
+            "Charles de Gaulle Airport": [49.006891, 2.571082]
+        };
+        const STAGE_OF = { vienna: ['維也納', '#b45309'], lake: ['奧地利湖區', '#0f766e'], riviera: ['蔚藍海岸', '#0369a1'], paris: ['花都巴黎', '#9f1239'] };
+        let homeMap = null, homeMarkers = {};
+
+        function generateHomeHTML() {
+            const stages = [['vienna', '維也納', '#b45309'], ['lake', '奧地利湖區', '#0f766e'], ['riviera', '蔚藍海岸', '#0369a1'], ['paris', '花都巴黎', '#9f1239']];
+            let total = 0; stages.forEach(s => total += itineraryData[s[0]].length);
+
+            const list = stages.map(([key, name, color]) => {
+                const days = itineraryData[key].map(d => `
+                    <button class="map-loc w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 transition-colors border border-transparent" data-q="${String(d.mapQuery).replace(/"/g, '&quot;')}" title="${(d.date + ' ' + d.dayTitle + '｜' + d.schedule.map(s => s.time + '：' + s.loc).join('／')).replace(/"/g, '&quot;')}">
+                        <span class="text-xs font-bold text-white px-2 py-1 rounded flex-shrink-0" style="background:${color}">${d.date.split(' ')[0]}</span>
+                        <span class="min-w-0 flex-1">
+                            <span class="block font-semibold text-slate-700 text-sm truncate">${d.dayTitle}</span>
+                            <span class="block text-xs text-slate-400 truncate"><i class="fa-solid fa-location-dot mr-1"></i>${d.mapQuery}</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs flex-shrink-0"></i>
+                    </button>`).join('');
+                return `
+                    <div class="mb-5">
+                        <div class="flex items-center gap-2 mb-2 px-1">
+                            <span class="w-2.5 h-2.5 rounded-full" style="background:${color}"></span>
+                            <h3 class="font-bold text-slate-800">${name}</h3>
+                            <span class="text-xs text-slate-400">${itineraryData[key].length} 天</span>
+                        </div>
+                        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-2">${days}</div>
+                    </div>`;
+            }).join('');
+
+            const routeDir = 'https://www.google.com/maps/dir/' + ['Taoyuan International Airport', 'Vienna Austria', 'Hallstatt Austria', 'Nice France', 'Cannes France', 'Grasse France', 'Paris France', 'Palace of Versailles', 'Charles de Gaulle Airport'].map(encodeURIComponent).join('/');
+
+            return `
+                ${sectionHeader('fa-map-location-dot', '行程總覽地圖', '點選下方任一天，即可在地圖上顯示該景點位置；或開啟完整旅程路線。')}
+                <div class="grid lg:grid-cols-5 gap-6">
+                    <div class="lg:col-span-3 lg:order-2">
+                        <div class="lg:sticky lg:top-24">
+                            <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden relative z-0">
+                                <div id="overviewMap" class="h-[320px] md:h-[440px] lg:h-[540px] bg-slate-100"></div>
+                                <a href="${routeDir}" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 py-3 text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors">
+                                    <i class="fa-solid fa-route"></i> 在 Google 地圖查看完整路線
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2 lg:order-1">
+                        <div class="text-xs text-slate-400 mb-3 px-1">共 ${total} 個行程地點</div>
+                        ${list}
+                    </div>
+                </div>`;
+        }
+
+        function slotEmoji(t) { return t === '早上' ? '🌅' : t === '下午' ? '🌤️' : '🌙'; }
+
+        // 建立首頁 Leaflet 多圖釘地圖
+        function initHomeMap() {
+            const el = document.getElementById('overviewMap');
+            if (!el || typeof L === 'undefined') return;
+            if (homeMap) { homeMap.remove(); homeMap = null; }
+            homeMarkers = {};
+
+            homeMap = L.map(el, { scrollWheelZoom: false, zoomControl: true });
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19, subdomains: 'abcd'
+            }).addTo(homeMap);
+
+            const order = ['vienna', 'lake', 'riviera', 'paris'];
+            const latlngs = [], bounds = [];
+            let seq = 0;
+            order.forEach(key => {
+                const [stageName, color] = STAGE_OF[key];
+                itineraryData[key].forEach(d => {
+                    const c = COORDS[d.mapQuery];
+                    if (!c) return;
+                    seq++;
+                    latlngs.push(c); bounds.push(c);
+                    const summary = d.schedule.map(s => `<div style="margin:2px 0"><b>${slotEmoji(s.time)} ${s.time}</b>　${s.loc}<br><span style="color:#64748b">${s.act}</span></div>`).join('');
+                    const klookLine = d.klook ? `<div style="margin-top:6px;color:#b45309;font-weight:600">💎 ${d.klook}</div>` : '';
+                    const popup = `<div style="min-width:210px;max-width:260px">
+                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                          <span style="background:${color};color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px">${d.date}</span>
+                          <span style="font-size:11px;color:#94a3b8">${stageName}</span>
+                        </div>
+                        <div style="font-weight:700;font-size:15px;margin-bottom:6px;color:#1e293b">${d.dayTitle}</div>
+                        ${summary}${klookLine}
+                        <a href="${gmapsLink(d.mapQuery)}" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;color:#0369a1;font-weight:600;font-size:13px">在 Google 地圖開啟 ↗</a>
+                    </div>`;
+                    const m = L.circleMarker(c, { radius: 8, color: '#fff', weight: 2, fillColor: color, fillOpacity: 1 })
+                        .addTo(homeMap)
+                        .bindPopup(popup)
+                        .bindTooltip(`${d.date}　${d.dayTitle}`, { direction: 'top', offset: [0, -6] });
+                    homeMarkers[d.mapQuery] = m;
+                });
+            });
+
+            // 旅程路線（依序連線）
+            L.polyline(latlngs, { color: '#b45309', weight: 2, opacity: 0.45, dashArray: '5,6' }).addTo(homeMap);
+
+            if (bounds.length) homeMap.fitBounds(bounds, { padding: [40, 40] });
+            setTimeout(() => { if (homeMap) { homeMap.invalidateSize(); if (bounds.length) homeMap.fitBounds(bounds, { padding: [40, 40] }); } }, 600);
+        }
+
         async function renderRegion(regionKey) {
             container.classList.remove('fade-in');
             void container.offsetWidth;
             container.classList.add('fade-in');
 
-            if (regionKey === 'booking') {
+            if (regionKey === 'home') {
+                container.innerHTML = generateHomeHTML();
+                initHomeMap();
+            } else if (regionKey === 'booking') {
                 container.innerHTML = generateBookingHTML();
             } else if (regionKey === 'prep') {
                 container.innerHTML = prepLoadingHTML();
@@ -677,8 +819,26 @@
             });
         });
 
-        // 初始化顯示維也納
-        renderRegion('vienna');
+        // 行程總覽地圖：點選地點 → 地圖飛到該圖釘並開啟摘要
+        container.addEventListener('click', function (e) {
+            const b = e.target.closest('.map-loc');
+            if (!b) return;
+            const q = b.getAttribute('data-q');
+            const m = homeMarkers[q];
+            container.querySelectorAll('.map-loc').forEach(x => x.classList.remove('map-loc-on'));
+            b.classList.add('map-loc-on');
+            if (homeMap && m) {
+                homeMap.flyTo(m.getLatLng(), 14, { duration: 0.8 });
+                m.openPopup();
+            }
+            if (window.matchMedia('(max-width: 1023px)').matches) {
+                const el = document.getElementById('overviewMap');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+
+        // 初始化顯示首頁總覽
+        renderRegion('home');
     </script>
 </body>
 </html>
