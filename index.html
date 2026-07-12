@@ -528,6 +528,13 @@
             paris:   { name: '花都巴黎',      color: '#a9797d', sub: 'D16–D23 · 09/10–09/17 · 藝術與浪漫' }
         };
         const curDay = { vienna: 0, lake: 0, riviera: 0, paris: 0 };
+        // 各區域 orientation 地圖（放在 stage 最上方）
+        const STAGE_MAPS = {
+            vienna:  [{ src: 'assets/region/vienna-map.jpg', label: '維也納市區' }, { src: 'assets/region/vienna-map-2.jpg', label: '維也納市區·地鐵' }],
+            lake:    [{ src: 'assets/region/hohensalzburg-map.jpg', label: '薩爾茨堡舊城／要塞' }, { src: 'assets/region/hallstatt-map.jpg', label: '哈修塔特小鎮' }, { src: 'assets/region/hallstatt-map-2.jpg', label: '哈修塔特周邊' }],
+            riviera: [{ src: 'assets/region/nice-map.png', label: '尼斯與蔚藍海岸' }],
+            paris:   [{ src: 'assets/region/paris-map.jpg', label: '巴黎市區' }]
+        };
 
         function slotStyle(t) {
             if (t === '早上') return { cls: 'slot-am', icon: 'fa-sun', emoji: '🌅' };
@@ -598,8 +605,8 @@
                             <button class="chip open-tab" data-tab="booking"><i class="fa-solid fa-gem" style="color:var(--gold)"></i>預訂清單</button>
                             <button class="chip open-tab" data-tab="prep"><i class="fa-solid fa-suitcase-rolling" style="color:var(--sage)"></i>行前準備</button>
                         </div>
-                        <details class="mt-3 group">
-                            <summary class="cursor-pointer text-xs text-[var(--muted)] hover:text-[var(--rose)] select-none"><i class="fa-solid fa-chevron-right group-open:rotate-90 transition-transform mr-1"></i>展開當日地圖</summary>
+                        <details open class="mt-3 group">
+                            <summary class="cursor-pointer text-xs text-[var(--muted)] hover:text-[var(--rose)] select-none"><i class="fa-solid fa-chevron-right group-open:rotate-90 transition-transform mr-1"></i>當日地圖（點此收合）</summary>
                             <div class="mt-2 rounded-xl overflow-hidden border border-[var(--line)]"><iframe width="100%" height="240" style="border:0" loading="lazy" src="${mapEmbed(day.mapQuery)}" allowfullscreen></iframe></div>
                         </details>
                     </div>
@@ -622,6 +629,22 @@
         }
 
         // 緊湊雙欄
+        function stageMapsHTML(region) {
+            const maps = STAGE_MAPS[region] || [];
+            if (!maps.length) return '';
+            const imgs = maps.map(m => `
+                <figure class="min-w-0">
+                    <a href="${m.src}" target="_blank" rel="noopener" class="block rounded-xl overflow-hidden border border-[var(--line)]">
+                        <img src="${m.src}" alt="${m.label}" loading="lazy" class="w-full max-h-72 object-contain bg-[#efe9e0]">
+                    </a>
+                    <figcaption class="text-xs text-[var(--muted)] mt-1 text-center">${m.label}（點擊看大圖）</figcaption>
+                </figure>`).join('');
+            return `
+                <details open class="mt-8 pt-5 border-t border-[var(--line)] group">
+                    <summary class="cursor-pointer text-sm font-semibold text-[var(--ink)] select-none flex items-center gap-2"><i class="fa-solid fa-map text-[var(--rose)]"></i>區域地圖<span class="text-xs font-normal text-[var(--muted)]">（點此收合）</span></summary>
+                    <div class="mt-2 grid ${maps.length > 2 ? 'sm:grid-cols-2 lg:grid-cols-3' : maps.length > 1 ? 'sm:grid-cols-2' : ''} gap-3">${imgs}</div>
+                </details>`;
+        }
         function generateStageHTML(region) {
             const st = STAGE[region];
             return `
@@ -637,7 +660,8 @@
                         <div class="lg:sticky lg:top-20 space-y-1.5 lg:max-h-[calc(100vh-5.5rem)] lg:overflow-y-auto hide-scrollbar">${dayListHTML(region)}</div>
                     </div>
                     <div class="lg:col-span-5" id="day-detail">${dayDetailHTML(itineraryData[region][curDay[region]], region)}</div>
-                </div>`;
+                </div>
+                ${stageMapsHTML(region)}`;
         }
 
         function sectionHeader(icon, title, sub) {
