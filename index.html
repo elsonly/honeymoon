@@ -28,8 +28,9 @@
             background-color: var(--bg);
             color: var(--ink);
             -webkit-font-smoothing: antialiased;
-            padding-top: 3.5rem;   /* 讓出固定頂欄高度 */
+            padding-top: 5.25rem;   /* 手機：兩列頂欄（品牌＋頁籤）高度 */
         }
+        @media (min-width: 640px) { body { padding-top: 3.5rem; } }   /* 桌機：單列頂欄 */
         /* 固定頂欄：原生 CSS 保險，不依賴 Tailwind CDN class 生成 */
         body > header {
             position: fixed !important;
@@ -76,18 +77,18 @@
         .leaflet-popup-content-wrapper { border-radius: 12px; }
     </style>
 </head>
-<body class="pt-14 pb-24">
+<body class="pb-24">
 
     <!-- 纖細固定導覽列 -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-[#f4f0ea]/95 backdrop-blur border-b border-[#e8ded3]">
         <div class="max-w-6xl mx-auto px-4">
-            <div class="flex items-center gap-3 h-14">
-                <div class="flex items-center gap-2 flex-shrink-0">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 sm:h-14">
+                <div class="flex items-center gap-2 flex-shrink-0 h-11 sm:h-auto">
                     <span class="text-[var(--rose)]"><i class="fa-solid fa-heart text-sm"></i></span>
                     <span class="serif text-xl font-bold tracking-wide text-[var(--ink)]">Honeymoon<span class="text-[var(--rose)]">·</span>2026</span>
                     <span class="hidden sm:inline text-xs text-[var(--muted)] cn-serif ml-1">維也納 ▸ 湖區 ▸ 蔚藍海岸 ▸ 巴黎 · 23 天</span>
                 </div>
-                <nav class="flex items-center gap-0.5 ml-auto overflow-x-auto hide-scrollbar">
+                <nav class="flex items-center gap-0.5 sm:ml-auto overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 pb-1 sm:pb-0">
                     <button class="tab-btn tab-active text-sm" data-region="home"><i class="fa-solid fa-map-location-dot mr-1"></i>總覽</button>
                     <button class="tab-btn text-sm" data-region="vienna">維也納</button>
                     <button class="tab-btn text-sm" data-region="lake">薩爾茨堡·湖區</button>
