@@ -2,3 +2,4 @@
 .env
 google-apps-script.gs
 keys
+.DS_Store

@@ -69,7 +69,7 @@
             <div class="relative max-w-6xl mx-auto px-6 py-10 md:py-14 text-center">
                 <p class="text-amber-500 uppercase tracking-[0.2em] text-xs md:text-sm font-bold mb-3">Grand Tour of Europe 2026</p>
                 <h1 class="text-4xl md:text-5xl font-bold text-white tracking-widest mb-4">21天歐洲紀念之旅</h1>
-                <p class="text-slate-300 md:text-lg">旗艦版 V6：維也納 ✦ 奧地利湖區 ✦ 蔚藍海岸 ✦ 花都巴黎</p>
+                <p class="text-slate-300 md:text-lg">V2 自駕版：維也納 ✦ 薩爾茨堡·國王湖 ✦ 哈修塔特 ✦ 蔚藍海岸 ✦ 花都巴黎</p>
             </div>
         </div>
 
@@ -78,7 +78,7 @@
             <div class="flex overflow-x-auto hide-scrollbar border-b border-slate-200">
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-active" data-region="home"><i class="fa-solid fa-map-location-dot mr-1.5 text-sm"></i>行程總覽</button>
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="vienna">Stage 1: 維也納</button>
-                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="lake">Stage 2: 奧地利湖區</button>
+                <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="lake">Stage 2: 薩爾茨堡·國王湖·湖區</button>
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="riviera">Stage 3: 蔚藍海岸</button>
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="paris">Stage 4: 花都巴黎</button>
                 <button class="tab-btn flex-shrink-0 py-4 px-5 text-center whitespace-nowrap tab-inactive" data-region="booking"><i class="fa-solid fa-cart-shopping mr-1.5 text-sm"></i>預訂採購</button>
@@ -144,51 +144,60 @@
                     schedule: [
                         { time: "早上", loc: "城市公園/普拉特", act: "前往城市公園散步，或至 Prater 浪漫復古摩天輪走走", trans: "🚇 地鐵 U4線 (Stadtpark站) 或 U1線", food: "Café Landtmann" },
                         { time: "下午", loc: "克恩滕大街商圈", act: "在 Kärntner Straße 等核心商圈進行奧地利伴手禮大補貨", trans: "🚇 地鐵 U1線 (-> Stephansplatz站)", food: "Zum Schwarzen Kameel" },
-                        { time: "晚上", loc: "飯店周邊", act: "早點回飯店整理行李，準備隔日出發前往阿爾卑斯湖區", trans: "🚶 步行 或 🚇 地鐵 返回飯店", food: "Ribs of Vienna (人氣烤肋排)" }
+                        { time: "晚上", loc: "飯店周邊", act: "早點回飯店整理行李，準備隔日取車自駕前往薩爾茨堡", trans: "🚶 步行 或 🚇 地鐵 返回飯店", food: "Ribs of Vienna (人氣烤肋排)" }
                     ]
                 }
             ],
             lake: [
                 {
-                    date: "08/31 (一)", dayTitle: "高山公路與絕美仙境", mapQuery: "Hallstatt, Austria", img: "assets/l31.jpg",
-                    klook: "",
+                    date: "08/31 (一)", dayTitle: "維也納→薩爾茨堡：莫札特之城＋要塞", mapQuery: "Salzburg Altstadt", img: "assets/salzburg30.jpg",
+                    klook: "🎟️ 霍亨薩爾茨堡要塞纜車票（含參觀）；9 月關門約 18:00，15:30 前到纜車站 ｜ 🏨 祖爾珀斯特綠色飯店 (Das Grüne Hotel zur Post)",
                     schedule: [
-                        { time: "早上", loc: "高山公路 (Postalm)", act: "自駕取車出發離開維也納，開車繞經 Postalm 高山公路享受絕美山景", trans: "🚗 自駕 (維也納取車 -> A1 高速公路 -> Postalm)", food: "飯店早餐" },
-                        { time: "下午", loc: "哈修塔特 (Hallstatt)", act: "抵達 Hallstatt 湖邊散步，捕捉明信片經典角度", trans: "🚗 自駕 (沿 B166 / B158 景觀公路前往湖區)", food: "高山公路沿途輕食" },
-                        { time: "晚上", loc: "哈修塔特湖畔", act: "入住湖區旅館，享受寧靜的湖畔夜晚與德奧傳統料理", trans: "🚶 小鎮內步行前往餐廳與旅館", food: "Seewirt Zauner 或 Gasthof Simony" }
+                        { time: "早上", loc: "維也納 / A1 高速公路", act: "維也納市區取車出發沿 A1 西行，直抵薩爾茨堡（約 3h，不繞路）", trans: "🚗 自駕 (維也納取車 -> A1 -> 薩爾茨堡，約 3h)", food: "飯店早餐" },
+                        { time: "下午", loc: "薩爾茨堡舊城", act: "停 Park & Ride 步行進舊城：Getreidegasse 糧食胡同、莫札特出生地、主教座堂；15:30 前步行上霍亨薩爾茨堡要塞（15–20 分無排隊），參觀 50 分，纜車下山", trans: "🚶 P&R 步行進舊城 + 🚶 步行上要塞 + 🚠 纜車下山", food: "薩爾茨堡舊城傳統餐館" },
+                        { time: "晚上", loc: "米拉貝爾花園 / 河畔", act: "漫步米拉貝爾花園（真善美拍攝地）與薩爾茨河畔，對岸遠眺要塞打燈夜景", trans: "🚶 步行", food: "Augustiner Bräustübl 修道院啤酒花園" }
                     ]
                 },
                 {
-                    date: "09/01 (二)", dayTitle: "鹽礦探險與湖畔漫步", mapQuery: "Hallstatt Salt Mine", img: "assets/l01.jpg",
-                    klook: "",
+                    date: "09/01 (二)", dayTitle: "國王湖：阿爾卑斯翡翠峽灣", mapQuery: "Königssee, Germany", img: "assets/konigssee31.jpg",
+                    klook: "🛂 跨境德國一日：訂車需開放跨境、記得帶護照（申根免檢） ｜ 🏨 祖爾珀斯特綠色飯店 (Das Grüne Hotel zur Post)",
                     schedule: [
-                        { time: "早上", loc: "哈修塔特 (Hallstatt)", act: "漫步明信片小鎮，探訪天主教堂與骨屋 (Beinhaus)", trans: "🚶 步行 或 🚢 湖區渡船 (前往 Hallstatt Markt)", food: "飯店早餐" },
-                        { time: "下午", loc: "哈修塔特鹽礦 / 湖區", act: "若鹽礦與 Skywalk 已開放則登頂參觀；若整修則租小船遊湖", trans: "🚠 鹽礦地面纜車 (Salzbergbahn) 或 🛶 租木船", food: "Café Derbl" },
-                        { time: "晚上", loc: "哈修塔特湖畔", act: "從湖心遠眺小鎮，或是改前往 Altaussee 鹽礦進行歷史體驗", trans: "🚗 自駕 或 🚶 步行", food: "湖區特色景觀餐廳" }
+                        { time: "早上", loc: "Schönau am Königssee", act: "開車 40 分跨境德國，於 Schönau 搭安靜的電動遊船深入峽灣國王湖", trans: "🚗 自駕 (薩爾茨堡 -> Schönau 約 40 分) + 🚢 國王湖電動船", food: "飯店早餐" },
+                        { time: "下午", loc: "St. Bartholomä / Obersee", act: "於紅頂洋蔥教堂下船，續步行到 Obersee 上湖欣賞鏡面倒影與瀑布（全程精華）", trans: "🚶 步行 (St. Bartholomä -> Obersee 約 15 分) + 🚢 回程船", food: "St. Bartholomä 湖畔餐廳（烤鱒魚）" },
+                        { time: "晚上", loc: "薩爾茨堡", act: "傍晚開車回薩爾茨堡，享受莫札特之城最後一晚夜色", trans: "🚗 自駕回薩爾茨堡", food: "薩爾茨堡舊城精緻餐廳" }
                     ]
                 },
                 {
-                    date: "09/02 (三)", dayTitle: "達克斯坦山與聖沃夫岡", mapQuery: "5 Fingers, Dachstein", img: "assets/l02.jpg",
-                    klook: "",
+                    date: "09/02 (三)", dayTitle: "薩爾茨堡→哈修塔特：世界遺產湖畔", mapQuery: "Hallstatt, Austria", img: "assets/hallstatt01.jpg",
+                    klook: "⚠️ 哈修塔特停車位稀少，建議提前查好 P Lahn ｜ 🏨 貝爾格弗裡德飯店 (Gasthof Bergfried)",
                     schedule: [
-                        { time: "早上", loc: "Dachstein觀景台", act: "前往 Obertraun 搭乘纜車至 Dachstein 五指觀景台，俯瞰阿爾卑斯山", trans: "🚗 自駕 (飯店 -> 纜車站) + 🚠 Dachstein 纜車", food: "飯店早餐" },
-                        { time: "下午", loc: "高薩湖 / 巴德伊舍", act: "探訪 Gosausee 靜謐倒影 或 造訪皇家小鎮 Bad Ischl 皇家別墅", trans: "🚗 自駕 (B166 公路 或 B158 公路前往)", food: "Konditorei Zauner (歷史甜點名店)" },
-                        { time: "晚上", loc: "聖沃夫岡 (St. Wolfgang)", act: "漫步至聖沃夫岡湖畔，享受精緻的景觀晚餐", trans: "🚗 自駕 (前往 St. Wolfgang) + 🚶 湖畔步行", food: "Zum Weissen Hirschen" }
+                        { time: "早上", loc: "薩爾茨堡 / A10 公路", act: "薩爾茨堡早餐後退房，開車約 1h15 前往哈修塔特（最輕鬆的移動日）", trans: "🚗 自駕 (薩爾茨堡 -> A10 -> B145 -> 哈修塔特，約 1h15)", food: "飯店早餐" },
+                        { time: "下午", loc: "哈修塔特鎮中心", act: "停鎮外停車場步行入鎮：Marktplatz 廣場、骨屋（Beinhaus）、天主教堂、世界遺產觀景台、湖畔漫步，可租木船", trans: "🚶 鎮外停車場步行入鎮 + 🛶 租木船遊湖（optional）", food: "鎮上湖景餐館輕食" },
+                        { time: "晚上", loc: "哈修塔特湖畔", act: "入住湖景旅館，享受寧靜的湖畔黃昏；趁遊客散去拍無人湖景", trans: "🚶 小鎮內步行", food: "Seewirt Zauner 或 Gasthof Simony（湖景）" }
                     ]
                 },
                 {
-                    date: "09/03 (四)", dayTitle: "阿爾卑斯飛往地中海", mapQuery: "Nice, France", img: "assets/l03.jpg",
-                    klook: "",
+                    date: "09/03 (四)", dayTitle: "看天二選一：達克斯坦 ☀️ / 鹽礦 🌧️", mapQuery: "5 Fingers, Dachstein", img: "assets/l02.jpg",
+                    klook: "⚠️ 早上看預報決定：晴→達克斯坦（雲霧勿上）；雨→鹽礦（室內不受影響） ｜ 🏨 貝爾格弗裡德飯店 (Gasthof Bergfried)",
                     schedule: [
-                        { time: "早上", loc: "湖區至維也納公路", act: "上午享受湖區最後寧靜的早晨，隨後自駕出發返回維也納國際機場", trans: "🚗 自駕 (經 A1 高速公路，約 3.5 小時)", food: "飯店早餐" },
-                        { time: "下午", loc: "維也納機場 (VIE)", act: "抵達機場辦理還車手續，並前往航廈辦理登機與行李託運", trans: "🚶 機場還車點步行至出境大廳", food: "機場航廈簡餐" },
+                        { time: "早上", loc: "晴 A：達克斯坦 / 雨 B：鹽礦", act: "☀️A：Obertraun 搭纜車上 Krippenstein 走五指觀景台俯瞰阿爾卑斯（開車 10 分）　🌧️B：搭 Salzbergbahn 上鹽山，參觀 Salzwelten 世界最古老鹽礦（地底滑道）", trans: "🚗+🚠 A：Dachstein 纜車（Obertraun，開車 10 分） / 🚠 B：Salzbergbahn 鹽山纜車", food: "飯店早餐" },
+                        { time: "下午", loc: "晴 A：高薩湖 / 雨 B：鎮上慢活", act: "☀️A：加遊冰洞、回程順繞 Gosausee 拍 Dachstein 倒影　🌧️B：順遊 Skywalk 世界遺產觀景台拿經典俯瞰照，回鎮上骨屋、教堂、湖畔", trans: "🚗 A：->Gosau / 🚶 B：鎮上步行", food: "A：Gosausee 咖啡 / B：鎮上湖景餐館" },
+                        { time: "晚上", loc: "哈修塔特湖畔（共通）", act: "返回哈修塔特，湖畔最後一晚，於湖心遠眺小鎮燈火、享受蔚藍時刻", trans: "🚶 步行 或 🚢 遊湖", food: "哈修塔特湖區景觀餐廳" }
+                    ]
+                },
+                {
+                    date: "09/04 (五)", dayTitle: "阿爾卑斯飛往地中海", mapQuery: "Nice, France", img: "assets/l03.jpg",
+                    klook: "🏨 入住尼斯佛羅倫薩飯店 (Hotel Florence Nice)",
+                    schedule: [
+                        { time: "早上", loc: "哈修塔特 / B145 公路", act: "上午湖畔最後散步，10:00 前自駕出發返回維也納國際機場（約 3.5h，中途休息加油）", trans: "🚗 自駕 (哈修塔特 -> B145 -> A10 -> A1 -> 維也納國際機場，約 3.5h)", food: "飯店早餐" },
+                        { time: "下午", loc: "維也納機場 (VIE)", act: "抵達機場加滿油、辦理還車，並前往航廈辦理登機與行李託運", trans: "⛽ 機場前加滿油 + 🚶 還車步行至出境大廳", food: "機場航廈簡餐" },
                         { time: "晚上", loc: "尼斯市區 (Nice)", act: "搭機直飛南法尼斯，抵達後搭乘輕軌 2 號線前往飯店入住", trans: "✈️ OS379 (18:55-20:40) + 🚋 尼斯輕軌 L2線", food: "飯店附近南法小酒館" }
                     ]
                 }
             ],
             riviera: [
                 {
-                    date: "09/04 (五)", dayTitle: "尼斯舊城與蔚藍海岸", mapQuery: "Promenade des Anglais, Nice", img: "assets/r04.png",
+                    date: "09/05 (六)", dayTitle: "尼斯舊城與蔚藍海岸", mapQuery: "Promenade des Anglais, Nice", img: "assets/r04.png",
                     klook: "",
                     schedule: [
                         { time: "早上", loc: "尼斯薩萊雅廣場", act: "探訪熱鬧的 Cours Saleya 傳統市集與鮮花市場，感受在地活力", trans: "🚋 輕軌 L1線 (-> Opéra - Vieille Ville站)", food: "飯店早餐" },
@@ -197,7 +206,7 @@
                     ]
                 },
                 {
-                    date: "09/05 (六)", dayTitle: "專車輕鬆遊：摩納哥與埃茲", mapQuery: "Eze Village, France", img: "assets/r05.jpeg",
+                    date: "09/06 (日)", dayTitle: "專車輕鬆遊：摩納哥與埃茲", mapQuery: "Eze Village, France", img: "assets/r05.jpeg",
                     klook: "🚐 Klook：摩納哥與埃茲半日遊專屬小巴 (取代火車/公車擠車)",
                     schedule: [
                         { time: "早上", loc: "摩納哥 (Monaco)", act: "搭乘專車前往奢華公國摩納哥，漫步 F1 經典賽道、皇宮區與賭場", trans: "🚐 Klook 小巴由尼斯飯店出發直達", food: "飯店早餐" },
@@ -206,7 +215,7 @@
                     ]
                 },
                 {
-                    date: "09/06 (日)", dayTitle: "安提布老城與星光坎城", mapQuery: "Cannes, France", img: "assets/r06.jpg",
+                    date: "09/07 (一)", dayTitle: "安提布老城與星光坎城", mapQuery: "Cannes, France", img: "assets/r06.jpg",
                     klook: "",
                     schedule: [
                         { time: "早上", loc: "安提布 (Antibes)", act: "前往歷史悠久的安提布老城，探訪畢卡索美術館與古老海港", trans: "🚆 TER 區間車 (Nice-Ville站 -> Antibes站)", food: "飯店早餐" },
@@ -215,7 +224,7 @@
                     ]
                 },
                 {
-                    date: "09/07 (一)", dayTitle: "專車深度遊：香水之都", mapQuery: "Grasse, France", img: "assets/r07.jpg",
+                    date: "09/08 (二)", dayTitle: "專車深度遊：香水之都", mapQuery: "Grasse, France", img: "assets/r07.jpg",
                     klook: "🚐 Klook：格拉斯與聖保羅全日遊專屬小巴 (取代昂貴私人包車)",
                     schedule: [
                         { time: "早上", loc: "聖保羅山城", act: "搭乘專車前往充滿文藝與現代藝術氣息的 Saint-Paul-de-Vence 散步", trans: "🚐 Klook 小巴由飯店接送", food: "飯店早餐" },
@@ -224,7 +233,7 @@
                     ]
                 },
                 {
-                    date: "09/08 (二)", dayTitle: "海濱放空：自由城與卡弗爾拉半島", mapQuery: "Villefranche-sur-Mer", img: "assets/r-villefranche.jpg",
+                    date: "09/09 (三)", dayTitle: "海濱放空：自由城與卡弗爾拉半島", mapQuery: "Villefranche-sur-Mer", img: "assets/r-villefranche.jpg",
                     klook: "",
                     schedule: [
                         { time: "早上", loc: "濱海自由城 (Villefranche)", act: "🆕 不拉車純放空日：睡飽後前往濱海自由城漁港小鎮，在金色沙灘游泳、曬太陽", trans: "🚆 TER 區間車 (Nice-Ville -> Villefranche-sur-Mer，約 7 分鐘) 或 🚌 公車", food: "飯店早餐" },
@@ -235,7 +244,7 @@
             ],
             paris: [
                 {
-                    date: "09/09 (三)", dayTitle: "告別地中海，TGV 直達花都", mapQuery: "Gare de Lyon, Paris", img: "assets/r08.jpg",
+                    date: "09/10 (四)", dayTitle: "告別地中海，TGV 直達花都", mapQuery: "Gare de Lyon, Paris", img: "assets/r08.jpg",
                     klook: "🚢 Klook：預訂塞納河遊船票 (建議黃昏/夜間時段)",
                     schedule: [
                         { time: "早上", loc: "尼斯火車站 (Nice-Ville)", act: "在尼斯享用最後的地中海風味早午餐，隨後前往火車站準備搭車", trans: "🚋 輕軌 L1/L2線 或 🚕 計程車 (-> Nice-Ville)", food: "飯店早餐 / 午餐" },
@@ -244,7 +253,16 @@
                     ]
                 },
                 {
-                    date: "09/10 (四)", dayTitle: "羅浮宮、西堤島與左岸", mapQuery: "Louvre Museum", img: "assets/p10.jpg",
+                    date: "09/11 (五)", dayTitle: "凡爾賽宮奢華一日遊", mapQuery: "Palace of Versailles", img: "assets/p11.jpg",
+                    klook: "🎟️ Klook：使用巴黎博物館通行證 (需提早官網預約時段)",
+                    schedule: [
+                        { time: "早上", loc: "凡爾賽宮", act: "持通行證搭火車前往巴黎近郊，參觀全歐洲最奢華的宮殿與鏡廳（週五避開週末人潮）", trans: "🚆 RER C線 (-> Versailles Château Rive Gauche站)", food: "Carette 經典烘焙與咖啡" },
+                        { time: "下午", loc: "凡爾賽花園", act: "漫步廣闊的皇家花園、大/小特里亞農宮與極具田園風情的瑪麗皇后村莊", trans: "🚶 步行 或 🚙 園區內付費遊園車", food: "宮殿花園內輕食咖啡廳" },
+                        { time: "晚上", loc: "巴黎市區", act: "搭車返回巴黎市區，晚上特別安排一頓正式且浪漫的精緻法式正餐", trans: "🚆 RER C線返回巴黎市區 + 🚇 地鐵", food: "米其林推薦或正式法餐" }
+                    ]
+                },
+                {
+                    date: "09/12 (六)", dayTitle: "羅浮宮、西堤島與左岸", mapQuery: "Louvre Museum", img: "assets/p10.jpg",
                     klook: "🎟️ Klook：購買巴黎博物館通行證 (Paris Museum Pass 4/6 日版)",
                     schedule: [
                         { time: "早上", loc: "羅浮宮 (第1區)", act: "上午深度參觀世界級藝術聖殿羅浮宮，持通行證走專屬通道親臨三寶", trans: "🚇 地鐵 1/7號線 (-> Palais-Royal - Musée du Louvre)", food: "Angelina (熱巧克力與蒙布朗)" },
@@ -253,57 +271,39 @@
                     ]
                 },
                 {
-                    date: "09/11 (五)", dayTitle: "凡爾賽宮奢華一日遊", mapQuery: "Palace of Versailles", img: "assets/p11.jpg",
-                    klook: "🎟️ Klook：使用巴黎博物館通行證 (需提早官網預約時段)",
-                    schedule: [
-                        { time: "早上", loc: "凡爾賽宮", act: "持通行證搭火車前往巴黎近郊，參觀全歐洲最奢華的宮殿與鏡廳", trans: "🚆 RER C線 (-> Versailles Château Rive Gauche站)", food: "Carette 經典烘焙與咖啡" },
-                        { time: "下午", loc: "凡爾賽花園", act: "漫步廣闊的皇家花園、大/小特里亞農宮與極具田園風情的瑪麗皇后村莊", trans: "🚶 步行 或 🚙 園區內付費遊園車", food: "宮殿花園內輕食咖啡廳" },
-                        { time: "晚上", loc: "巴黎市區", act: "搭車返回巴黎市區，晚上特別安排一頓正式且浪漫的精緻法式正餐", trans: "🚆 RER C線返回巴黎市區 + 🚇 地鐵", food: "米其林推薦或正式法餐" }
-                    ]
-                },
-                {
-                    date: "09/12 (六)", dayTitle: "鐵塔地標與香榭麗舍", mapQuery: "Arc de Triomphe", img: "assets/p12.jpg",
-                    klook: "🎟️ Klook：使用巴黎博物館通行證 (免費登頂凱旋門)",
+                    date: "09/13 (日)", dayTitle: "鐵塔地標與香榭麗舍", mapQuery: "Arc de Triomphe", img: "assets/p12.jpg",
+                    klook: "🎟️ 博物館通行證（免費登頂凱旋門）｜🏨 今晚入住鉑爾曼艾菲爾飯店，可從客房欣賞鐵塔整點閃爍",
                     schedule: [
                         { time: "早上", loc: "夏佑宮 / 戰神廣場", act: "前往夏佑宮拍攝艾菲爾鐵塔最佳零死角視角，隨後在戰神廣場散步", trans: "🚇 地鐵 6/9號線 (-> Trocadéro站) + 🚶 步行", food: "Carette Trocadéro 露天早餐" },
                         { time: "下午", loc: "凱旋門 (第8區)", act: "持通行證免排隊登上凱旋門，俯瞰十二道放射狀大道並漫步香榭大道", trans: "🚇 地鐵 6號線 (-> Charles de Gaulle - Étoile站)", food: "香榭麗舍大道周邊景觀餐廳" },
-                        { time: "晚上", loc: "香榭麗舍商圈", act: "在香榭麗舍大道周邊享用豐盛晚餐，體驗巴黎最熱鬧的繁華之夜", trans: "🚶 沿大道步行", food: "Le Relais de l’Entrecôte (排隊牛排)" }
+                        { time: "晚上", loc: "香榭麗舍 / 鉑爾曼艾菲爾飯店", act: "在香榭麗舍享用晚餐後入住鉑爾曼艾菲爾飯店，欣賞客房內鐵塔整點閃爍夜景 ✨", trans: "🚇 地鐵 (凱旋門 -> 鉑爾曼飯店)", food: "Le Relais de l’Entrecôte (排隊牛排)" }
                     ]
                 },
                 {
-                    date: "09/13 (日)", dayTitle: "蒙馬特與歌劇院商圈", mapQuery: "Sacré-Cœur, Paris", img: "assets/p13.jpg",
-                    klook: "",
+                    date: "09/14 (一)", dayTitle: "Pullman 退房晨走鐵塔，蒙馬特慢遊", mapQuery: "Sacré-Cœur, Paris", img: "assets/p13.jpg",
+                    klook: "🏨 退 Pullman 前於戰神廣場晨走拍鐵塔 ｜ 奧賽美術館週一休館，改排蒙馬特",
                     schedule: [
-                        { time: "早上", loc: "蒙馬特高地", act: "搭地鐵前往波希米亞風情的蒙馬特，走訪聖心堂並在小丘廣場看畫家作畫", trans: "🚇 地鐵 2號線 (Anvers站) + 🚠 蒙馬特纜車", food: "飯店早餐" },
-                        { time: "下午", loc: "巴黎歌劇院商圈", act: "前往巴黎歌劇院商圈，在拉法葉百貨與春天百貨進行集中採買", trans: "🚇 地鐵 12號線轉 7號線 (-> Opéra站)", food: "Bouillon Pigalle (平價法式食堂)" },
-                        { time: "晚上", loc: "歌劇院周邊", act: "在歌劇院周邊熱門餐廳享用晚餐，為隔天的迪士尼一日遊充電", trans: "🚶 步行", food: "Pink Mamma (超人氣義式，需預訂)" }
+                        { time: "早上", loc: "戰神廣場 / 艾菲爾鐵塔", act: "Pullman 退房前於戰神廣場晨走與鐵塔合影，移入昆澤里飯店寄放行李，輕鬆開始這一天", trans: "🚶 步行 (Pullman -> 戰神廣場) → 🚇 地鐵移館", food: "Pullman 飯店早餐" },
+                        { time: "下午", loc: "蒙馬特高地 (第18區)", act: "搭地鐵前往波希米亞風情的蒙馬特，走訪聖心堂並在小丘廣場欣賞街頭畫家作畫，漫步葡萄園小徑", trans: "🚇 地鐵 2號線 (Anvers站) + 🚠 蒙馬特纜車", food: "蒙馬特區露天咖啡館輕食" },
+                        { time: "晚上", loc: "聖日耳曼德佩 / 左岸", act: "返回左岸，於聖日耳曼德佩區享用巴黎文人風格晚餐，感受花都夜晚悠閒步調", trans: "🚶 步行 + 🚇 地鐵", food: "Les Deux Magots / Café de Flore 或左岸 Bistrot" }
                     ]
                 },
                 {
-                    date: "09/14 (一)", dayTitle: "巴黎迪士尼樂園", mapQuery: "Disneyland Paris", img: "assets/p14.jpg",
+                    date: "09/15 (二)", dayTitle: "巴黎迪士尼樂園", mapQuery: "Disneyland Paris", img: "assets/p14.jpg",
                     klook: "🏰 Klook：提前預訂巴黎迪士尼樂園門票 (掃 QR Code 直接入園)",
                     schedule: [
-                        { time: "早上", loc: "迪士尼樂園", act: "週一前往完美避開週末人潮，開園即入場暢遊熱門設施", trans: "🚆 RER A線 (巴黎市區 -> Marne-la-Vallée站)", food: "飯店早餐 / 樂園輕食" },
+                        { time: "早上", loc: "迪士尼樂園", act: "週二前往完美避開週末人潮，開園即入場暢遊熱門設施", trans: "🚆 RER A線 (巴黎市區 -> Marne-la-Vallée站)", food: "飯店早餐 / 樂園輕食" },
                         { time: "下午", loc: "迪士尼影城/樂園", act: "繼續暢遊雙園區，觀賞精彩的主題大遊行與歐洲限定表演", trans: "🚶 雙樂園內步行", food: "樂園園區內主題餐廳" },
                         { time: "晚上", loc: "迪士尼樂園", act: "留到最後一刻，觀賞震撼動人的粉紅睡美人城堡星光煙火秀", trans: "🚆 RER A線 (返回巴黎市區)", food: "迪士尼小鎮或風味餐" }
                     ]
                 },
                 {
-                    date: "09/15 (二)", dayTitle: "奧賽美術館與瑪黑區", mapQuery: "Musée d'Orsay", img: "assets/p15.jpg",
-                    klook: "🎟️ Klook：使用巴黎博物館通行證 (免購票排隊)",
+                    date: "09/16 (三)", dayTitle: "奧賽美術館、百貨採買與最後巡禮", mapQuery: "Musée d'Orsay", img: "assets/p16.jpg",
+                    klook: "🎟️ 博物館通行證（奧賽免排隊，週三開放 ✅）",
                     schedule: [
-                        { time: "早上", loc: "奧賽美術館", act: "持通行證前往塞納河畔的奧賽美術館，在標格大時鐘旁欣賞印象派畫作", trans: "🚆 RER C線 或 🚇 地鐵 12號線 (Solférino站)", food: "飯店早餐" },
-                        { time: "下午", loc: "瑪黑區 (第3/4區)", act: "探訪極具文青個性的瑪麗區，逛獨立選物店並在孚日廣場歇息", trans: "🚇 地鐵 1號線 (St-Paul站) + 🚶 步行", food: "Breizh Café (巴黎最好吃可麗餅)" },
-                        { time: "晚上", loc: "巴黎市區", act: "特別造訪一間隱密的巴黎經典 Speakeasy 地下酒吧，小酌微醺", trans: "🚶 步行 或 🚕 預約 Uber", food: "特色餐酒館" }
-                    ]
-                },
-                {
-                    date: "09/16 (三)", dayTitle: "最後採買與退稅理清", mapQuery: "Gare de Lyon", img: "assets/p16.jpg",
-                    klook: "",
-                    schedule: [
-                        { time: "早上", loc: "左岸藥妝/精品區", act: "展開最後大採買，前往 Citypharma 藥妝店掃貨經典法國醫美保養品", trans: "🚇 地鐵 4號線 (-> St-Germain-des-Prés站)", food: "飯店早餐" },
-                        { time: "下午", loc: "超市/食品百貨", act: "造訪優質超市或食品百貨，將法式點心、鹽之花等伴手禮補齊", trans: "🚇 地鐵轉乘 或 🚕 計程車協助載運戰利品", food: "Bouillon Chartier (百年平價法式食堂)" },
-                        { time: "晚上", loc: "里昂車站", act: "回飯店完成行李打包與退稅單整理，並於華麗宮殿餐廳享用最後一餐", trans: "🚇 地鐵 1/14號線 (-> Gare de Lyon站)", food: "Le Train Bleu (藍色火車餐廳)" }
+                        { time: "早上", loc: "奧賽美術館 (第7區)", act: "前往塞納河畔的奧賽美術館，在標格大時鐘旁欣賞印象派大師傳世畫作（週三開放 ✅）", trans: "🚇 地鐵 12號線 (Solférino站) 或 🚆 RER C線 (Musée d'Orsay站)", food: "飯店早餐 / 奧賽館內 Café Campana" },
+                        { time: "下午", loc: "歌劇院 / 拉法葉百貨 / 瑪黑區", act: "前往歌劇院商圈在拉法葉與春天百貨精品採買，再逛瑪黑區獨立選物店與孚日廣場，並到 Citypharma 藥妝掃貨", trans: "🚇 地鐵 (-> Opéra站) + 🚇 地鐵 1號線 (St-Paul站)", food: "Breizh Café (可麗餅) 或 L'As du Fallafel" },
+                        { time: "晚上", loc: "里昂車站 / 超市", act: "到大型超市補齊乾貨伴手禮，回飯店完成行李打包與退稅單整理", trans: "🚇 地鐵 1/14號線 (-> Gare de Lyon站)", food: "Le Train Bleu (藍色火車餐廳)" }
                     ]
                 },
                 {
@@ -312,7 +312,7 @@
                     schedule: [
                         { time: "早上", loc: "戴高樂機場 (CDG)", act: "辦理退房，搭乘預約好的專屬機場接送前往機場，辦理退稅與登機", trans: "🚕 Klook 預約專車接送 (巴黎飯店 -> 戴高樂)", food: "機場航廈簡餐" },
                         { time: "下午", loc: "飛機上", act: "搭乘長榮航空 BR088 優質客機直飛返台 (預計 11:20 起飛)", trans: "✈️ 長榮航空 BR088 直飛航班", food: "長榮航空飛機餐" },
-                        { time: "晚上", loc: "桃園機場", act: "班機於夜間或隔日安全抵達台灣，滿載著 21 天的美好紀念順利返家", trans: "✈️ 抵達桃園國際機場，專車接送返家", food: "長榮航空飛機餐" }
+                        { time: "晚上", loc: "桃園機場", act: "班機於夜間或隔日安全抵達台灣，滿載著美好紀念順利返家", trans: "✈️ 抵達桃園國際機場，專車接送返家", food: "長榮航空飛機餐" }
                     ]
                 }
             ]
@@ -327,7 +327,7 @@
             { t: "格拉斯香水工坊體驗 + 聖保羅全日遊", d: "Day 11 · 09/07" },
             { t: "塞納河遊船票", d: "Day 13 · 09/09" },
             { t: "巴黎博物館通行證 Paris Museum Pass（4/6 日版）", d: "羅浮宮 / 凡爾賽 / 凱旋門 / 奧賽" },
-            { t: "巴黎迪士尼樂園門票（雙樂園一日券）", d: "Day 18 · 09/14" },
+            { t: "巴黎迪士尼樂園門票（雙樂園一日券）", d: "Day 21 · 09/15" },
             { t: "巴黎戴高樂機場 (CDG) 專車接送", d: "Day 21 · 09/17" }
         ];
         const SOUVENIRS = [
@@ -340,8 +340,8 @@
         // ===== 行前準備（來源：試算表「行前準備」分頁）=====
         const FLIGHTS = [
             { date: "08/26 (三)", route: "台北 桃園 → 維也納", note: "去程", code: "中華 CI0063" },
-            { date: "09/03 (四)", route: "維也納 VIE → 尼斯", note: "18:55 – 20:40", code: "奧航 OS379" },
-            { date: "09/09 (三)", route: "尼斯 → 巴黎 Gare de Lyon", note: "TGV 高鐵，約 5.5–6.5 小時", code: "TGV" },
+            { date: "09/04 (五)", route: "維也納 VIE → 尼斯", note: "18:55 – 20:40（自駕回機場，順延一天）", code: "奧航 OS379" },
+            { date: "09/10 (四)", route: "尼斯 → 巴黎 Gare de Lyon", note: "TGV 高鐵，約 5.5–6.5 小時", code: "TGV" },
             { date: "09/17 (四)", route: "巴黎 CDG → 台北 桃園", note: "11:20 起飛 · 直飛返台", code: "長榮 BR088" }
         ];
         const PREP = [
@@ -643,6 +643,8 @@
             "Schönbrunn Palace, Vienna": [48.184989, 16.311568],
             "Belvedere Palace, Vienna": [48.191072, 16.379761],
             "Kärntner Straße, Vienna": [48.206005, 16.371388],
+            "Salzburg Altstadt": [47.798200, 13.045500],
+            "Königssee, Germany": [47.592600, 12.988600],
             "Hallstatt, Austria": [47.534794, 13.598888],
             "Hallstatt Salt Mine": [47.5606, 13.644],
             "5 Fingers, Dachstein": [47.5099, 13.6883],
@@ -660,14 +662,15 @@
             "Sacré-Cœur, Paris": [48.886806, 2.343015],
             "Disneyland Paris": [48.870093, 2.77405],
             "Musée d'Orsay": [48.859918, 2.326585],
+            "Le Marais, Paris": [48.858800, 2.361100],
             "Gare de Lyon": [48.844683, 2.373774],
             "Charles de Gaulle Airport": [49.006891, 2.571082]
         };
-        const STAGE_OF = { vienna: ['維也納', '#b45309'], lake: ['奧地利湖區', '#0f766e'], riviera: ['蔚藍海岸', '#0369a1'], paris: ['花都巴黎', '#9f1239'] };
+        const STAGE_OF = { vienna: ['維也納', '#b45309'], lake: ['薩爾茨堡·國王湖·湖區', '#0f766e'], riviera: ['蔚藍海岸', '#0369a1'], paris: ['花都巴黎', '#9f1239'] };
         let homeMap = null, homeMarkers = {};
 
         function generateHomeHTML() {
-            const stages = [['vienna', '維也納', '#b45309'], ['lake', '奧地利湖區', '#0f766e'], ['riviera', '蔚藍海岸', '#0369a1'], ['paris', '花都巴黎', '#9f1239']];
+            const stages = [['vienna', '維也納', '#b45309'], ['lake', '薩爾茨堡·國王湖·湖區', '#0f766e'], ['riviera', '蔚藍海岸', '#0369a1'], ['paris', '花都巴黎', '#9f1239']];
             let total = 0; stages.forEach(s => total += itineraryData[s[0]].length);
 
             const list = stages.map(([key, name, color]) => {
